@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <title>Inicio</title>
+</head>
+<body>
+  <!-- menu de navegación -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">Végueta</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/home.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/nosotros.html">Nosotros</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Servicios</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Clientes</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/contacto.html">Contacto</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container my-5 contacto-container">
+    <div class="row align-items-center">
+      <!-- Texto a la izquierda -->
+      <div class="col-md-6">
+        <h1 class="fw-bold">Es momento de cambiar tu realidad.</h1>
+        <p class="lead">Sé un líder en el mercado laboral</p>
+      </div>
+      <!-- Formulario a la derecha -->
+      <div class="col-md-6">
+        <div class="form-section">
+          <form>
+            <div class="mb-3">
+              <label for="nombre" class="form-label">Nombres*</label>
+              <input type="text" class="form-control" id="nombre" placeholder="Nombres" required>
+            </div>
+            <div class="mb-3">
+              <label for="apellidos" class="form-label">Apellidos*</label>
+              <input type="text" class="form-control" id="apellidos" placeholder="Apellidos" required>
+            </div>
+            <div class="mb-3">
+              <label for="correo" class="form-label">Correo Electrónico*</label>
+              <input type="email" class="form-control" id="correo" placeholder="Correo Electrónico" required>
+            </div>
+            <div class="mb-3">
+              <label for="celular" class="form-label">Celular*</label>
+              <input type="tel" class="form-control" id="celular" placeholder="Celular" required>
+            </div>
+            <div class="mb-3">
+              <label for="sede" class="form-label">Sede de interés*</label>
+              <select class="form-select" id="sede" required>
+                <option value="">Seleccionar</option>
+                <option value="sede1">Sede 1</option>
+                <option value="sede2">Sede 2</option>
+                <option value="sede3">Sede 3</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="carrera" class="form-label">Carrera de interés*</label>
+              <select class="form-select" id="carrera" required>
+                <option value="">Seleccionar</option>
+                <option value="carrera1">Carrera 1</option>
+                <option value="carrera2">Carrera 2</option>
+                <option value="carrera3">Carrera 3</option>
+              </select>
+            </div>
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="checkbox" id="politicas" required>
+              <label class="form-check-label" for="politicas">
+                He leído y acepto las Políticas de Privacidad
+              </label>
+            </div>
+            <div class="form-check mb-3">
+              <input class="form-check-input" type="checkbox" id="publicidad">
+              <label class="form-check-label" for="publicidad">
+                Autorizo el envío de publicidad e información comercial.
+              </label>
+            </div>
+            <button type="submit" class="btn btn-success w-100">ENVIAR</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- footer -->
+  <footer class="bg-dark text-white pt-5">
+    <div class="container">
+      <div class="row">
+        <!-- Secciones de la página -->
+        <div class="col-md-4 mb-4">
+          <h5>Secciones</h5>
+          <ul class="list-unstyled">
+            <li><a href="#" class="text-white text-decoration-none">Home</a></li>
+            <li><a href="#" class="text-white text-decoration-none">Nosotros</a></li>
+            <li><a href="#" class="text-white text-decoration-none">Servicios</a></li>
+            <li><a href="#" class="text-white text-decoration-none">Clientes</a></li>
+            <li><a href="#" class="text-white text-decoration-none">Contacto</a></li>
+          </ul>
+        </div>
+
+        <!-- Información de contacto -->
+        <div class="col-md-4 mb-4">
+          <h5>Contacto</h5>
+          <p>
+            📍 Dirección: Calle Principal, 123<br>
+            📞 Teléfono: +1 234 567 890<br>
+            📧 Email: contacto@vegüeta.com
+          </p>
+          <p>Síguenos en:</p>
+          <a href="#" class="text-white me-3"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="text-white me-3"><i class="bi bi-twitter"></i></a>
+          <a href="#" class="text-white"><i class="bi bi-instagram"></i></a>
+        </div>
+
+        <!-- Formulario -->
+        <div class="col-md-4 mb-4">
+          <h5>Suscríbete</h5>
+          <form action="#" method="POST">
+            <div class="mb-3">
+              <label for="email" class="form-label">Correo Electrónico</label>
+              <input type="email" class="form-control" id="email" name="email" placeholder="Tu correo" required>
+            </div>
+            <div class="mb-3">
+              <label for="mensaje" class="form-label">Mensaje</label>
+              <textarea class="form-control" id="mensaje" name="mensaje" rows="3" placeholder="Escribe tu mensaje"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Enviar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Línea divisoria y derechos reservados -->
+    <div class="text-center bg-secondary py-3 mt-4">
+      <p class="mb-0">© 2025 Végueta. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+  <script src="/js/bootstrap.min.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>

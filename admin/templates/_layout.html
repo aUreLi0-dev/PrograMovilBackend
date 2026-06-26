@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <title>{{locals['title']}}</title>
+</head>
+<body>
+  <!-- menu de navegación -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="/admin">Admin {{session['user']['user_name']}}</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link {% if locals['nav'] == 'home' %}active{% endif %}" href="/admin">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link  {% if locals['nav'] == 'nosotros' %}active{% endif %}" href="/admin/body-parts">Partes del Cuerpo</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/users">Usuarios</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/clientes">Clientes</a>
+          </li>
+          <li class="nav-item">
+            <a id="btnSignOut" class="nav-link  {% if locals['nav'] == 'contacto' %}active{% endif %}" href="/sign-out">Salir</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- content -->
+  {% block content %}{% endblock %}
+  <!-- footer -->
+  <footer class="bg-dark text-white pt-5">
+    <!-- Línea divisoria y derechos reservados -->
+    <div class="text-center bg-secondary py-3 mt-4">
+      <p class="mb-0">© 2025 Végueta. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+  <script src="/js/bootstrap.min.js"></script>
+  <!-- javascripts -->
+  {% block javascripts %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var button = document.getElementById('btnSignOut');
+      button.addEventListener('click', function(event) {
+        event.preventDefault();
+        const token = localStorage.getItem('jwtToken');
+          alert('Intentando cerrar sesión...'); // Alerta para verificar que el evento se dispara
+          axios.get('/api/sign-out', {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          }).then(function(response) {
+            console.log('Sesión cerrada:', response);
+            localStorage.removeItem('jwtToken');  // Eliminar el token del almacenamiento local
+            // Redirigir al usuario a la página de inicio o de login
+            //window.location.href = '/';
+          }).catch(function(error) {
+            console.error('Error al cerrar sesión:', error);
+          });
+      });
+    });
+  </script>
+  {% endblock %}
+</body>
+</html>

@@ -1,0 +1,34 @@
+{% extends './_app.html' %}
+{% block extra_head %}
+  
+{% endblock %}
+
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="text-center mb-4">Agregar Nueva Parte del Cuerpo</h2>
+  
+  <form action="/admin/body-parts/{% if locals['body_part'].id == None %}create{% else %}update{% endif %}" method="POST" class="border p-4 shadow-sm rounded bg-light">
+    <div class="mb-3">
+      <label for="name" class="form-label">Nombre de la Parte del Cuerpo</label>
+      <input type="hidden" name="id" {% if locals['body_part'].id != None %}value="{{locals['body_part'].id}}" {% endif %}/>
+      <input 
+        type="text" 
+        class="form-control" 
+        id="name" 
+        name="name" 
+        placeholder="Ej: Brazo" 
+        maxlength="10" 
+        required
+        value="{{locals['body_part'].name}}"
+      >
+    </div>
+    
+    <button type="submit" class="btn btn-primary w-100">Agregar</button>
+  </form>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+  
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends './_layout.html' %}
+{% block content %}
+<div class="container my-5 contacto-container">
+  <h1>Listado de Partes del Cuerpo</h1>
+  <a class="btn btn-success" href="/admin/body-parts/add">Agregar</a>
+  <table class="table table-striped table-bordered table-hover">
+    <thead class="table-dark">
+      <tr>
+        <th>Nombre</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for body_part in locals['body_parts'] %}
+        <tr>
+          <td>{{body_part.name}}</td>
+          <td>
+            <a class="btn btn-primary" href="/admin/body-parts/edit/{{body_part.id}}">Editar</a>
+            <a class="btn btn-secondary" href="/admin/body-parts/delete/{{body_part.id}}">Eliminar</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+{% block javascripts %}
+{% endblock %}

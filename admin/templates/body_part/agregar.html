@@ -1,0 +1,16 @@
+{% extends './_layout.html' %}
+{% block content %}
+<div class="container my-5 contacto-container">
+  <h1>Agregar Partes del Cuerpo</h1>
+  <form method="POST" action="/admin/body-parts/create">
+    <div class="form-group">
+      <label for="txtNombre">Nombre</label>
+      <input type="text" name="name" class="form-control" id="txtNombre" aria-describedby="nameHelp" placeholder="Ingrsee Nombre">
+      <small id="nameHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+    </div>
+    <button type="submit" class="btn btn-primary">Grabar</button>
+  </form>
+</div>
+{% endblock %}
+{% block javascripts %}
+{% endblock %}

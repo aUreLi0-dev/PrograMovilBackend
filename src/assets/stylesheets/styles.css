@@ -1,0 +1,68 @@
+.contenedor{
+  max-width: 800px; /* Ancho máximo del contenido */
+  margin: 0 auto; /* Márgenes iguales a la izquierda y derecha */
+  padding: 20px; /* Espaciado interno opcional */
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+}
+
+.color-rojo{
+  color: #ca2421;
+  font-weight: 800;
+}
+
+.letra-grandota{
+  font-size: 80px;
+}
+
+.fila{
+  width: 100%;
+  position: relative;
+  float: left;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.columna {
+  width: 33%;
+  position: relative;
+  float: left;
+  display: flex;
+  flex-direction: column; /* Organiza elementos en columna */
+  justify-content: center; /* Centra la imagen verticalmente */
+  align-items: center; /* Centra horizontalmente */
+  height: 300px;
+  box-sizing: border-box;
+  text-align: center; /* Centra el texto del párrafo */
+}
+
+.columna img {
+  max-width: 100%; /* Escala la imagen para que no se desborde */
+  height: auto;
+}
+
+.columna p {
+  margin-top: 10px; /* Espaciado entre la imagen y el párrafo */
+  font-size: 14px;
+  color: #333;
+}
+
+.navbar-dark .navbar-nav .nav-link:hover {
+  color: #ffc107; /* Cambia a amarillo */
+  transition: color 0.3s ease;
+}
+
+.carousel-item img {
+  height: 650px; /* Ajusta a la altura deseada */
+  object-fit: cover; /* Asegura que la imagen cubra el espacio sin deformarse */
+}
+
+.contacto-container{
+  margin-top: 4rem !important;
+}
+
+.form-control, .btn, .alert{
+  border-radius: 0px !important;
+}
+
