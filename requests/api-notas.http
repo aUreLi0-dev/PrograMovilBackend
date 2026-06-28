@@ -1,5 +1,5 @@
 @baseUrl = http://localhost:5000
-@token = <!-- reemplazar con el token obtenido de sign-in -->
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc4MjY4NjQ1NiwianRpIjoiYzE5YjEwZTYtOTJmNS00MzE0LThlZTktZTk4NzQ1ZjhlNmIwIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjIwMjMyNTQ4IiwibmJmIjoxNzgyNjg2NDU2LCJjc3JmIjoiYjQxY2MxZTMtZWFhMC00Y2NjLWFmZmMtZmUwNTU3ZTE3YzQ4IiwiZXhwIjoxNzgyNzA0NDU2fQ.NDYI6BXYkrT03cLx_FUOmeTosJkeHjyc3LUV0VuzaSw
 
 ### ==========================================
 ### 1. LOGIN - obtener JWT token
