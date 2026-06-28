@@ -3,7 +3,7 @@ from flask_jwt_extended import create_access_token, get_jwt, jwt_required
 from flask import Blueprint, request, make_response, session, jsonify
 from main.database import Session
 from main.application import REVOKED_TOKENS
-from main.models import User
+from notas.models import AppUser
 
 api = Blueprint('main_apis', __name__)
 
@@ -15,17 +15,15 @@ def sign_in():
   password = data['password']
   # logic
   db_session = Session()
-  user = db_session.query(User).filter(
-    User.user_name == username,
-    User.password == password
-  ).first() # SELECT * FROM un = 'asdfasd' and passowrd = ''''
+  user = db_session.query(AppUser).filter(
+    AppUser.code == username,
+    AppUser.password_hash == password
+  ).first()
   if user:
-    expires = timedelta(minutes=300)  # Configura la duración del token a 1 hora
+    expires = timedelta(minutes=300)
     access_token = create_access_token(identity=username, expires_delta=expires)
-    # Crear respuesta y establecer cookie con JWT
     response = make_response()
     response.set_cookie('access_token', access_token, max_age=30, httponly=True)
-    # Guardar datos del usuario y miembro en la sesión
     session['status'] = 'True'
     session['user'] = user.to_dict()
     return jsonify({"message": access_token}), 200

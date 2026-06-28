@@ -1,0 +1,145 @@
+@baseUrl = http://localhost:5000
+@token = <!-- reemplazar con el token obtenido de sign-in -->
+
+### ==========================================
+### 1. LOGIN - obtener JWT token
+### ==========================================
+POST {{baseUrl}}/api/sign-in
+Content-Type: application/json
+
+{
+  "username": "20232548",
+  "password": "ulima123"
+}
+
+### ==========================================
+### 2. CALCULADORA - cursos del estudiante
+### ==========================================
+
+### 2.1 Todos los cursos del estudiante con promedios
+GET {{baseUrl}}/api/v1/calculator/student/2/courses
+Authorization: Bearer {{token}}
+
+### 2.2 Detalle de un curso específico (course_offering + student)
+GET {{baseUrl}}/api/v1/calculator/course-offering/1/student/2
+Authorization: Bearer {{token}}
+
+### 2.3 Detalle por matrícula (enrollment)
+GET {{baseUrl}}/api/v1/calculator/enrollment/3
+Authorization: Bearer {{token}}
+
+### ==========================================
+### 3. ASSESSMENT TYPES - tipos de evaluación
+### ==========================================
+
+### 3.1 Listar todos los tipos
+GET {{baseUrl}}/api/v1/assessment-types
+Authorization: Bearer {{token}}
+
+### 3.2 Obtener un tipo por ID
+GET {{baseUrl}}/api/v1/assessment-types/1
+Authorization: Bearer {{token}}
+
+### 3.3 Crear un nuevo tipo
+POST {{baseUrl}}/api/v1/assessment-types
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Trabajo Grupal",
+  "abbreviation": "TG",
+  "description": "Evaluación grupal de trabajo colaborativo"
+}
+
+### 3.4 Actualizar un tipo
+PUT {{baseUrl}}/api/v1/assessment-types
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "id": 1,
+  "name": "Examen Escrito",
+  "abbreviation": "EE",
+  "description": "Evaluación escrita individual"
+}
+
+### 3.5 Eliminar un tipo
+DELETE {{baseUrl}}/api/v1/assessment-types/9
+Authorization: Bearer {{token}}
+
+### ==========================================
+### 4. ASSESSMENTS - evaluaciones del sílabo
+### ==========================================
+
+### 4.1 Listar evaluaciones (todas o filtradas por syllabus_id)
+GET {{baseUrl}}/api/v1/assessments?syllabus_id=1
+Authorization: Bearer {{token}}
+
+### 4.2 Obtener una evaluación por ID
+GET {{baseUrl}}/api/v1/assessments/1
+Authorization: Bearer {{token}}
+
+### 4.3 Crear una nueva evaluación
+POST {{baseUrl}}/api/v1/assessments
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "syllabus_id": 1,
+  "assessment_type_id": 4,
+  "code": "TA01",
+  "name": "Tarea Académica 1",
+  "week_number": 3,
+  "weight": 10.0
+}
+
+### 4.4 Actualizar una evaluación
+PUT {{baseUrl}}/api/v1/assessments
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "id": 1,
+  "weight": 25.0
+}
+
+### 4.5 Eliminar una evaluación
+DELETE {{baseUrl}}/api/v1/assessments/107
+Authorization: Bearer {{token}}
+
+### ==========================================
+### 5. STUDENT SCORES - notas del estudiante
+### ==========================================
+
+### 5.1 Listar notas (todas o filtradas por enrollment_id/assessment_id)
+GET {{baseUrl}}/api/v1/student-scores?enrollment_id=3
+Authorization: Bearer {{token}}
+
+### 5.2 Obtener una nota por ID
+GET {{baseUrl}}/api/v1/student-scores/1
+Authorization: Bearer {{token}}
+
+### 5.3 Crear una nota (upsert: si existe enrollment+assessment, actualiza)
+POST {{baseUrl}}/api/v1/student-scores
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "enrollment_id": 3,
+  "assessment_id": 3,
+  "value": 13.5
+}
+
+### 5.4 Actualizar una nota por ID
+PUT {{baseUrl}}/api/v1/student-scores
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "id": 1,
+  "value": 17.0
+}
+
+### 5.5 Eliminar una nota
+DELETE {{baseUrl}}/api/v1/student-scores/5
+Authorization: Bearer {{token}}

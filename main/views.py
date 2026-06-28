@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, session, redirect
 from main.database import Session
-from main.models import User
+from notas.models import AppUser
 from main.middlewares import logged_go_admin
 
 view = Blueprint('main_views', __name__, template_folder='./templates')
@@ -66,10 +66,10 @@ def sign_in_login():
   password = request.form.get('password')
   # logic
   db_session = Session()
-  user = db_session.query(User).filter(
-    User.user_name == username,
-    User.password == password
-  ).first() # SELECT * FROM un = 'asdfasd' and passowrd = ''''
+  user = db_session.query(AppUser).filter(
+    AppUser.code == username,
+    AppUser.password_hash == password
+  ).first()
   if user:
     session['status'] = True
     session['user'] = user.to_dict()
