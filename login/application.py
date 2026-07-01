@@ -1,5 +1,6 @@
 # !/usr/bin/env python
 # -*- coding: utf-8 -*-
+from datetime import timedelta
 from flask import Flask, jsonify
 from flask_jwt_extended import JWTManager
 from flask_session import Session
@@ -16,6 +17,7 @@ APP.config['SESSION_PERMANENT'] = False
 APP.config['SESSION_USE_SIGNER'] = True
 APP.config['SESSION_KEY_PREFIX'] = 'session:'
 APP.config['JWT_SECRET_KEY'] = 'tu_clave_secreta_aqui' 
+APP.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=5)
 Session(APP)
 
 jwt = JWTManager(APP)

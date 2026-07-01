@@ -1,5 +1,5 @@
-from main.views import view as main_views
-from main.apis import api as main_apis
+from login.views import view as main_views
+from login.apis import api as main_apis
 from notas.blueprints import blueprints as notas_blueprints
 
 def register(app):

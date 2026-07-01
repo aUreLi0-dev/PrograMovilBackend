@@ -1,7 +1,6 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Date, Boolean, DECIMAL, Text, Time
 from sqlalchemy.orm import declarative_base, relationship
-from main.database import ToString
-from main.database import engine
+from core.database import ToString, engine
 
 Base = declarative_base()
 
@@ -131,3 +130,21 @@ class StudentScore(Base, ToString):
     value = Column(DECIMAL(5, 2))
     enrollment = relationship('Enrollment', back_populates='scores')
     assessment = relationship('Assessment')
+
+class Specialty(Base, ToString):
+    __tablename__ = 'specialty'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    career_id = Column(Integer, ForeignKey('career.id'), nullable=False)
+    name = Column(String(120), nullable=False)
+    description = Column(Text)
+    is_active = Column(Boolean, nullable=False, default=True)
+    career = relationship('Career')
+
+class StudentSpecialty(Base, ToString):
+    __tablename__ = 'student_specialty'
+    student_id = Column(Integer, ForeignKey('student.id'), primary_key=True)
+    specialty_id = Column(Integer, ForeignKey('specialty.id'), primary_key=True)
+    selection_type = Column(String(20), nullable=False, default='interest')
+    is_active = Column(Boolean, nullable=False, default=True)
+    student = relationship('Student')
+    specialty = relationship('Specialty')

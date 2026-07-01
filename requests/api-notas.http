@@ -2,45 +2,34 @@
 @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc4MjY4NjQ1NiwianRpIjoiYzE5YjEwZTYtOTJmNS00MzE0LThlZTktZTk4NzQ1ZjhlNmIwIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjIwMjMyNTQ4IiwibmJmIjoxNzgyNjg2NDU2LCJjc3JmIjoiYjQxY2MxZTMtZWFhMC00Y2NjLWFmZmMtZmUwNTU3ZTE3YzQ4IiwiZXhwIjoxNzgyNzA0NDU2fQ.NDYI6BXYkrT03cLx_FUOmeTosJkeHjyc3LUV0VuzaSw
 
 ### ==========================================
-### 1. LOGIN - obtener JWT token
-### ==========================================
-POST {{baseUrl}}/api/sign-in
-Content-Type: application/json
-
-{
-  "username": "20232548",
-  "password": "ulima123"
-}
-
-### ==========================================
-### 2. CALCULADORA - cursos del estudiante
+### 1. CALCULADORA - cursos del estudiante
 ### ==========================================
 
-### 2.1 Todos los cursos del estudiante con promedios
+### 1.1 Todos los cursos del estudiante con promedios
 GET {{baseUrl}}/api/v1/calculator/student/2/courses
 Authorization: Bearer {{token}}
 
-### 2.2 Detalle de un curso específico (course_offering + student)
+### 1.2 Detalle de un curso específico (course_offering + student)
 GET {{baseUrl}}/api/v1/calculator/course-offering/1/student/2
 Authorization: Bearer {{token}}
 
-### 2.3 Detalle por matrícula (enrollment)
+### 1.3 Detalle por matrícula (enrollment)
 GET {{baseUrl}}/api/v1/calculator/enrollment/3
 Authorization: Bearer {{token}}
 
 ### ==========================================
-### 3. ASSESSMENT TYPES - tipos de evaluación
+### 2. ASSESSMENT TYPES - tipos de evaluación
 ### ==========================================
 
-### 3.1 Listar todos los tipos
+### 2.1 Listar todos los tipos
 GET {{baseUrl}}/api/v1/assessment-types
 Authorization: Bearer {{token}}
 
-### 3.2 Obtener un tipo por ID
+### 2.2 Obtener un tipo por ID
 GET {{baseUrl}}/api/v1/assessment-types/1
 Authorization: Bearer {{token}}
 
-### 3.3 Crear un nuevo tipo
+### 2.3 Crear un nuevo tipo
 POST {{baseUrl}}/api/v1/assessment-types
 Authorization: Bearer {{token}}
 Content-Type: application/json
@@ -51,7 +40,7 @@ Content-Type: application/json
   "description": "Evaluación grupal de trabajo colaborativo"
 }
 
-### 3.4 Actualizar un tipo
+### 2.4 Actualizar un tipo
 PUT {{baseUrl}}/api/v1/assessment-types
 Authorization: Bearer {{token}}
 Content-Type: application/json
@@ -63,23 +52,23 @@ Content-Type: application/json
   "description": "Evaluación escrita individual"
 }
 
-### 3.5 Eliminar un tipo
+### 2.5 Eliminar un tipo
 DELETE {{baseUrl}}/api/v1/assessment-types/9
 Authorization: Bearer {{token}}
 
 ### ==========================================
-### 4. ASSESSMENTS - evaluaciones del sílabo
+### 3. ASSESSMENTS - evaluaciones del sílabo
 ### ==========================================
 
-### 4.1 Listar evaluaciones (todas o filtradas por syllabus_id)
+### 3.1 Listar evaluaciones (todas o filtradas por syllabus_id)
 GET {{baseUrl}}/api/v1/assessments?syllabus_id=1
 Authorization: Bearer {{token}}
 
-### 4.2 Obtener una evaluación por ID
+### 3.2 Obtener una evaluación por ID
 GET {{baseUrl}}/api/v1/assessments/1
 Authorization: Bearer {{token}}
 
-### 4.3 Crear una nueva evaluación
+### 3.3 Crear una nueva evaluación
 POST {{baseUrl}}/api/v1/assessments
 Authorization: Bearer {{token}}
 Content-Type: application/json

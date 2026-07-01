@@ -1,6 +1,6 @@
 from sqlalchemy import select, func, text
-from main.database import Session
-from main.models import BodyPart, Exercise
+from core.database import Session
+from login.models import BodyPart, Exercise
 
 def listar_bodyparts():
   session = Session()

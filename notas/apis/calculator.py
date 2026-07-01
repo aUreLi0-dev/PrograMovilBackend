@@ -2,7 +2,7 @@ import traceback
 from flask import Blueprint, jsonify
 from flask_jwt_extended import jwt_required
 from sqlalchemy.orm import joinedload
-from main.database import Session
+from core.database import Session
 from notas.models import (
     Enrollment, Student, Assessment, StudentScore, Course,
     CourseOffering, Section, Syllabus
