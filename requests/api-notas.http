@@ -132,3 +132,38 @@ Content-Type: application/json
 ### 5.5 Eliminar una nota
 DELETE {{baseUrl}}/api/v1/student-scores/5
 Authorization: Bearer {{token}}
+
+### ==========================================
+### 6. SELECCIONAR ESPECIALIDAD (setup_carrera)
+### ==========================================
+
+### 6.1 Listar todas las carreras
+GET {{baseUrl}}/api/v1/careers
+Authorization: Bearer {{token}}
+
+### 6.2 Listar todas las especialidades
+GET {{baseUrl}}/api/v1/specialties
+Authorization: Bearer {{token}}
+
+### 6.3 Listar especialidades filtradas por carrera (carrera_id = 1)
+GET {{baseUrl}}/api/v1/specialties?career_id=1
+Authorization: Bearer {{token}}
+
+### 6.4 Guardar configuración de especialidad (estudiante id = 9)
+POST {{baseUrl}}/api/v1/students/9/setup-career
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "career_id": 1,
+  "specialty_ids": [1, 2]
+}
+
+### ==========================================
+### 7. HORARIO
+### ==========================================
+
+### 7.1 Obtener horario de estudiante (estudiante id = 2)
+GET {{baseUrl}}/api/v1/students/2/schedule
+Authorization: Bearer {{token}}
+

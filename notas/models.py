@@ -148,3 +148,33 @@ class StudentSpecialty(Base, ToString):
     is_active = Column(Boolean, nullable=False, default=True)
     student = relationship('Student')
     specialty = relationship('Specialty')
+
+class ScheduleSession(Base, ToString):
+    __tablename__ = 'schedule_session'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    section_id = Column(Integer, ForeignKey('section.id'), nullable=False)
+    day_of_week = Column(Integer, nullable=False)
+    start_time = Column(Time, nullable=False)
+    end_time = Column(Time, nullable=False)
+    classroom = Column(String(100))
+    color_hex = Column(String(20))
+
+    section = relationship('Section')
+
+class CourseAdvisingSession(Base, ToString):
+    __tablename__ = 'course_advising_session'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    course_offering_id = Column(Integer, ForeignKey('course_offering.id'), nullable=False)
+    section_id = Column(Integer, ForeignKey('section.id'))
+    teacher_id = Column(Integer, ForeignKey('teacher.id'), nullable=False)
+    day_of_week = Column(Integer, nullable=False)
+    start_time = Column(Time, nullable=False)
+    end_time = Column(Time, nullable=False)
+    classroom = Column(String(100))
+    meeting_url = Column(String(255))
+    modality = Column(String(50), nullable=False, default='hybrid')
+    note = Column(Text)
+
+    course_offering = relationship('CourseOffering')
+    section = relationship('Section')
+    teacher = relationship('Teacher')
