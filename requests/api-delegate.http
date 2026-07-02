@@ -1,0 +1,45 @@
+@baseUrl = http://localhost:5000
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc4MzAyMzk5NywianRpIjoiZjY3NTFjMTAtMDNmMy00YTBmLWIxMDItYTZlYWMzYTgyZWFkIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjIwMjM1MjE4IiwibmJmIjoxNzgzMDIzOTk3LCJjc3JmIjoiMDYxNmI2NjMtNDRkYS00MDBjLWEzMTEtNWQ5ZThmMGMxYWNlIiwiZXhwIjoxNzgzMDQxOTk3LCJ1c2VyX2lkIjoxfQ.4eCMj6E2ukvr0VbBwcH25oeXva9sYGry2dOj2t2aThI
+
+### ==========================================
+### 1. SIGN-IN - Iniciar sesión
+### ==========================================
+POST {{baseUrl}}/api/sign-in
+Content-Type: application/json
+
+{
+  "code": "20235218",
+  "password": "ulima123"
+}
+
+### ==========================================
+### 2. DELEGADO - Listar Secciones
+### ==========================================
+GET {{baseUrl}}/api/v1/delegate/sections
+Authorization: Bearer {{token}}
+
+### ==========================================
+### 3. DELEGADO - Publicar Anuncio en una Sección
+### ==========================================
+POST {{baseUrl}}/api/v1/delegate/announcements
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "section_id": 1,
+  "title": "Entrega de Trabajo Final",
+  "message": "Estimados, recuerden que la entrega del Trabajo Final es este domingo a las 11:59 PM sin prórroga."
+}
+
+### ==========================================
+### 4. ANUNCIOS - Listar Anuncios de una Sección
+### ==========================================
+GET {{baseUrl}}/api/v1/sections/1/announcements
+Authorization: Bearer {{token}}
+
+### ==========================================
+### 5. ESTADÍSTICAS - Obtener estadísticas dinámicas de una Sección
+### ==========================================
+GET {{baseUrl}}/api/v1/sections/1/statistics
+Authorization: Bearer {{token}}
+
