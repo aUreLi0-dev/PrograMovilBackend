@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Date, Boolean, DECIMAL, Text, Time
+from sqlalchemy import Column, Integer, String, ForeignKey, Date, Boolean, DECIMAL, Text, Time, DateTime
 from sqlalchemy.orm import declarative_base, relationship
 from core.database import ToString, engine
 
@@ -178,3 +178,25 @@ class CourseAdvisingSession(Base, ToString):
     course_offering = relationship('CourseOffering')
     section = relationship('Section')
     teacher = relationship('Teacher')
+
+class SectionRepresentative(Base, ToString):
+    __tablename__ = 'section_representative'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    section_id = Column(Integer, ForeignKey('section.id'), nullable=False)
+    enrollment_id = Column(Integer, ForeignKey('enrollment.id'), nullable=False, unique=True)
+    position = Column(String(50), nullable=False)
+    is_active = Column(Boolean, nullable=False, default=True)
+
+    section = relationship('Section')
+    enrollment = relationship('Enrollment')
+
+class Announcement(Base, ToString):
+    __tablename__ = 'announcement'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    section_representative_id = Column(Integer, ForeignKey('section_representative.id'), nullable=False)
+    title = Column(String(150), nullable=False)
+    message = Column(Text, nullable=False)
+    published_at = Column(DateTime, nullable=False)
+    is_active = Column(Boolean, nullable=False, default=True)
+
+    section_representative = relationship('SectionRepresentative')
