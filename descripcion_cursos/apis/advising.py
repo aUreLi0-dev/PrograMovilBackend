@@ -1,10 +1,10 @@
 import traceback
 
 from flask import Blueprint, jsonify
-from flask_jwt_extended import jwt_required
 from sqlalchemy import or_
 from sqlalchemy.orm import joinedload
 
+from login.middlewares import jwt_required
 from descripcion_cursos.apis.helpers import (
     api_response,
     day_name,
@@ -12,13 +12,13 @@ from descripcion_cursos.apis.helpers import (
     teacher_to_dict,
 )
 from descripcion_cursos.models import CourseAdvisingSession, Section
-from main.database import Session
+from core.database import Session
 
 api = Blueprint('descripcion_cursos_advising', __name__)
 
 
 @api.route('/api/v1/descripcion-cursos/sections/<int:section_id>/advising', methods=['GET'])
-@jwt_required()
+@jwt_required
 def fetch_advising_sessions(section_id):
     response = None
     status = 200

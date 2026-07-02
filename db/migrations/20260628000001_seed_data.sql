@@ -427,6 +427,15 @@ INSERT INTO student_score (id, enrollment_id, assessment_id, value) VALUES
   (3, 3, 1, 14.0),  -- 20232548 IS-856 EE1
   (4, 3, 2, 15.5);  -- 20232548 IS-856 Proy1
 
+-- 10. PROGRESO DE MALLA
+-- Alumno 20232637: ciclo 7 actual, obligatorios de ciclo 6 aprobados y cursos actuales en progreso.
+INSERT INTO student_course_progress (id, student_id, curriculum_id, curriculum_course_id, status) VALUES
+  (1,  4, 1, 63, 'in_progress'),  -- Programacion Movil
+  (2,  4, 1, 45, 'in_progress'),  -- Ingenieria de Software II
+  (3,  4, 1, 38, 'in_progress'),  -- Gestion de Operaciones
+  (4, 4, 1, 37, 'in_progress'),  -- Sistemas de Inteligencia Empresarial
+  (5, 4, 1, 40, 'in_progress');  -- Aprendizaje de Maquina
+
 INSERT INTO curriculum_course_specialty (curriculum_course_id, specialty_id) VALUES
   (53, 1), (54, 3), (55, 2), (56, 4),
   (57, 1), (58, 3), (59, 2), (60, 4), (61, 4),
@@ -474,8 +483,40 @@ VALUES
   (67, 1, 74, 'completed_cycle', NULL, 5),  (68, 1, 75, 'completed_cycle', NULL, 5),
   (69, 1, 76, 'completed_cycle', NULL, 5),  (70, 1, 77, 'completed_cycle', NULL, 6);
 
+-- 10. DESCRIPCION DE CURSOS
+-- section_representative.json cruzado con enrollments.json y secciones.json.
+INSERT INTO section_representative (id, section_id, enrollment_id, position, is_active)
+VALUES
+  (1, 1, 1,  'delegate',    TRUE),
+  (2, 1, 14, 'subdelegate', TRUE),
+  (3, 5, 7,  'delegate',    TRUE),
+  (4, 5, 4,  'subdelegate', TRUE);
+
+-- anuncios.json, solo anuncios cuyo autor tiene representante resoluble en la seccion.
+INSERT INTO announcement (id, section_representative_id, title, message, published_at, is_active)
+VALUES
+  (1, 1, 'Cambio de Aula',
+   'La clase del jueves se realizara en el aula I2-104.', '2026-05-18 00:00:00', TRUE),
+  (2, 4, 'Avance Proyecto',
+   'La entrega del avance 2 sera el proximo martes durante el horario de clase habitual.', '2026-05-21 00:00:00', TRUE),
+  (3, 3, 'Material Complementario',
+   'El docente subio ejercicios adicionales de repaso al Aula Virtual.', '2026-05-22 00:00:00', TRUE);
+
+-- asesorias.json, solo filas con docente existente en esta migracion.
+INSERT INTO course_advising_session
+  (id, course_offering_id, section_id, teacher_id, day_of_week, start_time, end_time, classroom, meeting_url, modality, note)
+VALUES
+  (1, 1, 1, 1, 5, '15:00', '17:00', 'Pab I2 piso 2 ITLAB',
+   'https://ulima-edu-pe.zoom.us/j/95728854972?pwd=dGtQU2JhSUh4WmhMMHl4Ykt1cnZEUT09', 'hybrid', NULL),
+  (2, 4, 5, 2, 5, '10:00', '11:00', 'Pab. I2-102 (8)',
+   'https://ulima-edu-pe.zoom.us/j/6448302849?pwd=ck5jL1A4LzcwZGRMU2ljdVZhYzJnUT09', 'hybrid', NULL);
+
 -- migrate:down
 
+DELETE FROM course_advising_session;
+DELETE FROM announcement;
+DELETE FROM section_representative;
+DELETE FROM student_course_progress;
 DELETE FROM course_prerequisite;
 DELETE FROM curriculum_course_specialty;
 DELETE FROM student_score;

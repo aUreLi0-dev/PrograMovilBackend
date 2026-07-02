@@ -1,0 +1,90 @@
+@baseUrl = http://localhost:5000
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc4MzAzMzE2OSwianRpIjoiYjk1OGFkNTMtMDRlYy00Yzc4LWIyY2EtYTc4YjU4OGNkMzZkIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjIwMjMyNjM3IiwibmJmIjoxNzgzMDMzMTY5LCJjc3JmIjoiY2UyNmQ2MGQtMTVhZC00NjQ4LTlmZTMtMDU4YTUwNmJlNmIzIiwiZXhwIjoxNzgzMDUxMTY5LCJ1c2VyX2lkIjo0fQ.P8AgfoesOQ5ty6KlKGjy9XYjghgD_Ef5vuT9uQeTXs0
+
+### ==========================================
+### 1. LOGIN - alumno de prueba de malla
+### ==========================================
+# @name login
+POST {{baseUrl}}/api/sign-in
+Content-Type: application/json
+
+{
+  "code": "20232637",
+  "password": "ulima123"
+}
+
+### ==========================================
+### 2. MALLA - vista final del alumno
+### ==========================================
+# Usa progreso real y, si existe, aplica la simulacion encima.
+GET {{baseUrl}}/api/v1/malla
+Authorization: Bearer {{token}}
+
+### ==========================================
+### 3. MALLA - progreso real
+### ==========================================
+# Solo lectura. Los cambios manuales de la malla se prueban con simulacion.
+GET {{baseUrl}}/api/v1/malla/progress
+Authorization: Bearer {{token}}
+
+
+### ==========================================
+### 4. MALLA - simular curso como aprobado
+### ==========================================
+# Guarda simulated_approved y devuelve la explicacion final del curso.
+PUT {{baseUrl}}/api/v1/malla/simulation/course-status
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "curriculumCourseId": 63,
+  "status": "approved"
+}
+
+### ==========================================
+### 5. MALLA - simular curso como en curso
+### ==========================================
+# Guarda simulated_in_progress y devuelve la explicacion final del curso.
+PUT {{baseUrl}}/api/v1/malla/simulation/course-status
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "curriculumCourseId": 63,
+  "status": "in_progress"
+}
+
+### ==========================================
+### 6. MALLA - volver curso a estado calculado
+### ==========================================
+# Borra el override de simulacion. Luego puede quedar unlocked o locked segun requisitos.
+PUT {{baseUrl}}/api/v1/malla/simulation/course-status
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "curriculumCourseId": 63,
+  "status": "available"
+}
+
+### ==========================================
+### 7. MALLA - limpiar simulacion completa
+### ==========================================
+DELETE {{baseUrl}}/api/v1/malla/simulation
+Authorization: Bearer {{token}}
+
+### ==========================================
+### 8. MALLA - especialidades activas del alumno
+### ==========================================
+# Sale de student_specialty + specialty, no de todas las especialidades de la carrera.
+GET {{baseUrl}}/api/v1/malla/specialties
+Authorization: Bearer {{token}}
+
+### ==========================================
+### 9. MALLA - explicar estado de un curso
+### ==========================================
+# Devuelve la explicacion separada en base, simulation y final.
+@curriculumCourseId = 63
+
+GET {{baseUrl}}/api/v1/malla/courses/{{curriculumCourseId}}/status
+Authorization: Bearer {{token}}

@@ -12,7 +12,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import declarative_base, relationship
 
-from main.database import ToString
+from core.database import ToString
 
 Base = declarative_base()
 

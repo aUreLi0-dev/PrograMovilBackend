@@ -1,15 +1,15 @@
 @baseUrl = http://localhost:5000
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc4MjkzNzU5MSwianRpIjoiNmZjOTFjZGItNGY2ZS00MzJiLWIyOTEtN2NhZGFmNzQ0ZWNhIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjIwMjM1MjE4IiwibmJmIjoxNzgyOTM3NTkxLCJjc3JmIjoiYjMxZDdkNmQtNTExNi00N2JhLTg1NDctOGUzNTg3OTJjMmM1IiwiZXhwIjoxNzgyOTU1NTkxfQ.Bf_eyN8esRlJXguEEdW3W1wsCbN4YhZiXV1PBJdUaUg
-@sectionId = 5
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc4MzAyNzM5NCwianRpIjoiNjg4YWFkOGYtOWJlMC00NWFlLWJiZWUtODRhY2E5NDk4ZjQxIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjIwMjMyNjM3IiwibmJmIjoxNzgzMDI3Mzk0LCJjc3JmIjoiZTJhNjMwMWEtYTNlMi00YTJmLTg2ZmUtMmRmNTIwNmUzZGVlIiwiZXhwIjoxNzgzMDQ1Mzk0LCJ1c2VyX2lkIjo0fQ.yf67PYuqILre76KafcmNABTbHbayhYLm59nBgsEfpnI
+@sectionId = 1
 
 ### ==========================================
-### 1. LOGIN - obtener JWT token
+### 1. SIGN-IN - Iniciar sesión
 ### ==========================================
 POST {{baseUrl}}/api/sign-in
 Content-Type: application/json
 
 {
-  "username": "20232637",
+  "code": "20232637",
   "password": "ulima123"
 }
 
@@ -22,22 +22,12 @@ GET {{baseUrl}}/api/v1/descripcion-cursos/sections/{{sectionId}}
 Authorization: Bearer {{token}}
 
 ### ==========================================
-### 3. ANUNCIOS - anuncios de la seccion
+### 3. ANUNCIOS - visualizar anuncios de la seccion
 ### ==========================================
 
 ### 3.1 Listar anuncios activos de la seccion
 GET {{baseUrl}}/api/v1/descripcion-cursos/sections/{{sectionId}}/announcements
 Authorization: Bearer {{token}}
-
-### 3.2 Crear anuncio como delegado/subdelegado activo
-POST {{baseUrl}}/api/v1/descripcion-cursos/sections/{{sectionId}}/announcements
-Authorization: Bearer {{token}}
-Content-Type: application/json
-
-{
-  "titulo": "Recordatorio",
-  "mensaje": "No olvidar revisar el aula virtual."
-}
 
 ### ==========================================
 ### 4. ASESORIAS - horarios de asesoria

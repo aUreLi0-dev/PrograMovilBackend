@@ -1,9 +1,9 @@
 import traceback
 
-from flask import Blueprint, jsonify, request
-from flask_jwt_extended import get_jwt_identity, jwt_required
+from flask import Blueprint, g, jsonify, request
 from sqlalchemy.orm import joinedload
 
+from login.middlewares import jwt_required
 from descripcion_cursos.apis.helpers import (
     api_response,
     decimal_to_float,
@@ -18,13 +18,13 @@ from descripcion_cursos.models import (
     StudentScore,
     Syllabus,
 )
-from main.database import Session
+from core.database import Session
 
 api = Blueprint('descripcion_cursos_section', __name__)
 
 
 def _find_enrollment_for_section(session, section_id):
-    student_code = request.args.get('student_code') or get_jwt_identity()
+    student_code = request.args.get('student_code') or getattr(g, 'username', None)
     enrollment = None
 
     if student_code:
@@ -92,7 +92,7 @@ def _calculate_section_average(session, section):
 
 
 @api.route('/api/v1/descripcion-cursos/sections/<int:section_id>', methods=['GET'])
-@jwt_required()
+@jwt_required
 def fetch_section_detail(section_id):
     response = None
     status = 200
