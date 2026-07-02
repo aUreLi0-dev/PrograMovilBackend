@@ -1,7 +1,7 @@
 import traceback
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
-from main.database import Session
+from core.database import Session
 from notas.models import StudentScore
 
 api = Blueprint('notas_student_score', __name__)

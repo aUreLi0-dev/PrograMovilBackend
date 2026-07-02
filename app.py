@@ -1,8 +1,8 @@
 # !/usr/bin/env python
 # -*- coding: utf-8 -*-
-from main.application import APP
-from main.blueprints import register
-from main.middlewares import not_found
+from login.application import APP
+from login.blueprints import register
+from login.middlewares import not_found
 
 if __name__ == '__main__':
   register(APP)

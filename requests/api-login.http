@@ -1,0 +1,48 @@
+@baseUrl = http://localhost:5000
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc4Mjk0MjA3NywianRpIjoiZTgxZWFhMzctYmZlYy00ODRlLTg0NjMtMThlZDEyMGQyMDY3IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjIwMjMyNTQ4IiwibmJmIjoxNzgyOTQyMDc3LCJjc3JmIjoiZmNiZmRmNjYtNDJhMC00YzZhLWE4MDAtNGViNGM5ZTdiYTI5IiwiZXhwIjoxNzgyOTYwMDc3LCJ1c2VyX2lkIjoyfQ.5CwpZu8LUKBhkgG97E5eDfkJ_DV-lUVinC0sXRe3Z7k
+### ==========================================
+### 1. SIGN-IN - Iniciar sesión
+### ==========================================
+POST {{baseUrl}}/api/sign-in
+Content-Type: application/json
+
+{
+  "code": "20232548",
+  "password": "ulima123"
+}
+
+### ==========================================
+### 2. SIGN-OUT - Cerrar sesión
+### ==========================================
+GET {{baseUrl}}/api/sign-out
+Authorization: Bearer {{token}}
+
+### ==========================================
+### 3. PERFIL - Obtener datos del usuario autenticado
+### ==========================================
+GET {{baseUrl}}/api/me
+Authorization: Bearer {{token}}
+
+### ==========================================
+### 4. SETUP - Guardar carrera y especialidades
+### ==========================================
+PUT {{baseUrl}}/api/me/setup
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "career_id": 1,
+  "especialidades": [1, 2],
+  "current_level": 5
+}
+
+### ==========================================
+### 5. ESPECIALIDADES - Actualizar solo especialidades
+### ==========================================
+PUT {{baseUrl}}/api/me/especialidades
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "especialidades": [2, 3]
+}

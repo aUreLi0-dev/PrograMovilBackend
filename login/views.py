@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, session, redirect
-from main.database import Session
+from core.database import Session
 from notas.models import AppUser
-from main.middlewares import logged_go_admin
+from login.middlewares import logged_go_admin
 
 view = Blueprint('main_views', __name__, template_folder='./templates')
 
