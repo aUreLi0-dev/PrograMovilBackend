@@ -27,6 +27,21 @@ def _find_curriculum_course(session, student, curriculum_course_id):
     )
 
 
+def _visual_status(requested_status):
+    if requested_status in ('current', 'in_progress'):
+        return 'current'
+    return requested_status
+
+
+def _status_transition_error(current_status, requested_status):
+    requested_visual_status = _visual_status(requested_status)
+    if requested_visual_status == 'current' and current_status != 'unlocked':
+        return 'Solo un curso disponible puede pasar a cursando'
+    if requested_visual_status == 'approved' and current_status != 'current':
+        return 'Solo un curso en curso puede pasar a aprobado'
+    return None
+
+
 @api.route('/api/v1/malla/simulation/course-status', methods=['PUT'])
 @jwt_required
 def update_simulated_course_status():
@@ -65,7 +80,7 @@ def update_simulated_course_status():
             response = jsonify(api_response(
                 'Estado de simulacion invalido',
                 success=False,
-                error='Usa approved, in_progress, current, available o unlocked',
+                error='Usa approved, in_progress, current o available',
             ))
             status = 400
             return response, status
@@ -93,10 +108,50 @@ def update_simulated_course_status():
             if simulation:
                 session.delete(simulation)
             session.commit()
+            calculated_status = explain_course_status(session, student, curriculum_course.id)
+            final_status = calculated_status['final']['status']
+            final_source = calculated_status['final']['source']
+            if final_status != 'unlocked':
+                response = jsonify(api_response(
+                    'El curso no puede quedar disponible',
+                    success=False,
+                    error='El estado recalculado no es unlocked',
+                    data={
+                        'curriculumCourseId': curriculum_course.id,
+                        'status': final_status,
+                        'source': final_source,
+                        'storedStatus': None,
+                    },
+                ))
+                status = 409
+                return response, status
+
             response = jsonify(api_response(
-                'Estado simulado limpiado correctamente',
-                data=explain_course_status(session, student, curriculum_course.id),
+                'Curso cambiado a disponible correctamente',
+                data={
+                    'curriculumCourseId': curriculum_course.id,
+                    'status': 'available',
+                    'source': final_source,
+                    'storedStatus': None,
+                },
             ))
+            return response, status
+
+        current_status_data = explain_course_status(session, student, curriculum_course.id)
+        current_status = current_status_data['final']['status']
+        transition_error = _status_transition_error(current_status, normalized_status)
+        if transition_error:
+            response = jsonify(api_response(
+                'Cambio de estado no permitido',
+                success=False,
+                error=transition_error,
+                data={
+                    'curriculumCourseId': curriculum_course.id,
+                    'currentStatus': current_status,
+                    'requestedStatus': _visual_status(normalized_status),
+                },
+            ))
+            status = 409
             return response, status
 
         stored_status = SIMULATION_INPUT_STATUS[normalized_status]
@@ -115,7 +170,12 @@ def update_simulated_course_status():
 
         response = jsonify(api_response(
             'Estado simulado actualizado correctamente',
-            data=explain_course_status(session, student, curriculum_course.id),
+            data={
+                'curriculumCourseId': simulation.curriculum_course_id,
+                'status': _visual_status(normalized_status),
+                'source': 'simulation',
+                'storedStatus': simulation.status,
+            },
         ))
     except Exception as e:
         session.rollback()

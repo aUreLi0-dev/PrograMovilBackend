@@ -3,7 +3,7 @@
 @sectionId = 1
 
 ### ==========================================
-### 1. SIGN-IN - Iniciar sesión
+### 1. SIGN-IN - iniciar sesion
 ### ==========================================
 POST {{baseUrl}}/api/sign-in
 Content-Type: application/json
@@ -14,26 +14,29 @@ Content-Type: application/json
 }
 
 ### ==========================================
-### 2. DESCRIPCION DE CURSOS - detalle de seccion
+### 2. DESCRIPCION DE CURSOS 
 ### ==========================================
 
-### 2.1 Obtener detalle de la seccion
+### 2.1 Datos del encabezado del curso
+# Trae nombre del curso, seccion, docente y asistencia.
 GET {{baseUrl}}/api/v1/descripcion-cursos/sections/{{sectionId}}
 Authorization: Bearer {{token}}
 
 ### ==========================================
-### 3. ANUNCIOS - visualizar anuncios de la seccion
+### 3. ANUNCIOS
 ### ==========================================
 
-### 3.1 Listar anuncios activos de la seccion
-GET {{baseUrl}}/api/v1/descripcion-cursos/sections/{{sectionId}}/announcements
+### 3.1 Anuncios activos
+# Es el mismo listado que usa delegado; aca solo se consume para mostrarlo.
+GET {{baseUrl}}/api/v1/sections/{{sectionId}}/announcements
 Authorization: Bearer {{token}}
 
 ### ==========================================
-### 4. ASESORIAS - horarios de asesoria
+### 4. ASESORIAS
 ### ==========================================
 
-### 4.1 Listar asesorias del curso/seccion
+### 4.1 Horarios de asesoria
+# Muestra las asesorias relacionadas al curso y a la seccion.
 GET {{baseUrl}}/api/v1/descripcion-cursos/sections/{{sectionId}}/advising
 Authorization: Bearer {{token}}
 
@@ -41,6 +44,7 @@ Authorization: Bearer {{token}}
 ### 5. CONTACTOS - docente y alumnos
 ### ==========================================
 
-### 5.1 Listar docente y alumnos de la seccion
+### 5.1 Docente y alumnos
+# Trae al profesor, alumnos, delegado y subdelegado si existen.
 GET {{baseUrl}}/api/v1/descripcion-cursos/sections/{{sectionId}}/contacts
 Authorization: Bearer {{token}}

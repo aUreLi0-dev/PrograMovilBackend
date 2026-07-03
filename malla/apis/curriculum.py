@@ -26,7 +26,7 @@ SIMULATION_INPUT_STATUS = {
     'in_progress': 'simulated_in_progress',
     'current': 'simulated_in_progress',
 }
-SIMULATION_RESET_STATUS = {'available', 'unlocked'}
+SIMULATION_RESET_STATUS = {'available'}
 
 
 def api_response(message, data=None, success=True, error=None):

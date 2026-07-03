@@ -16,75 +16,85 @@ Content-Type: application/json
 ### ==========================================
 ### 2. MALLA - vista final del alumno
 ### ==========================================
-# Usa progreso real y, si existe, aplica la simulacion encima.
 GET {{baseUrl}}/api/v1/malla
 Authorization: Bearer {{token}}
+# Para ubicar casos: Lenguaje y Comunicacion I (1) aprobado, Programacion Movil (63) en curso,
+# Planeamiento Estrategico (46) disponible, Sistemas ERP (43) bloqueado.
 
 ### ==========================================
 ### 3. MALLA - progreso real
 ### ==========================================
-# Solo lectura. Los cambios manuales de la malla se prueban con simulacion.
 GET {{baseUrl}}/api/v1/malla/progress
 Authorization: Bearer {{token}}
+# Lenguaje y Comunicacion I (1) aprobado por nivel actual
+# Programacion Movil (63) en curso por progreso real
 
 
 ### ==========================================
-### 4. MALLA - simular curso como aprobado
+### 4. MALLA - simular curso como en curso
 ### ==========================================
-# Guarda simulated_approved y devuelve la explicacion final del curso.
+# Paso 1: Planeamiento Estrategico (46) esta disponible y pasa a cursando.
 PUT {{baseUrl}}/api/v1/malla/simulation/course-status
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "curriculumCourseId": 63,
-  "status": "approved"
-}
-
-### ==========================================
-### 5. MALLA - simular curso como en curso
-### ==========================================
-# Guarda simulated_in_progress y devuelve la explicacion final del curso.
-PUT {{baseUrl}}/api/v1/malla/simulation/course-status
-Authorization: Bearer {{token}}
-Content-Type: application/json
-
-{
-  "curriculumCourseId": 63,
+  "curriculumCourseId": 46,
   "status": "in_progress"
 }
+# Caso 409: Sistemas ERP (43) esta bloqueado y no puede pasar a cursando.
+
+### ==========================================
+### 5. MALLA - simular curso como aprobado
+### ==========================================
+# Paso 2: el mismo curso, ya cursando, pasa a aprobado.
+PUT {{baseUrl}}/api/v1/malla/simulation/course-status
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "curriculumCourseId": 46,
+  "status": "approved"
+}
+# Si intentas aprobarlo sin correr antes el paso 4, debe responder 409.
 
 ### ==========================================
 ### 6. MALLA - volver curso a estado calculado
 ### ==========================================
-# Borra el override de simulacion. Luego puede quedar unlocked o locked segun requisitos.
+# Paso 3: aprobado vuelve a disponible si sus requisitos siguen cumplidos.
 PUT {{baseUrl}}/api/v1/malla/simulation/course-status
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "curriculumCourseId": 63,
+  "curriculumCourseId": 46,
   "status": "available"
 }
+# Planeamiento Estrategico (46) queda disponible.
+# Programacion Movil (63) vuelve a en curso; Sistemas ERP (43) sigue bloqueado.
 
 ### ==========================================
 ### 7. MALLA - limpiar simulacion completa
 ### ==========================================
 DELETE {{baseUrl}}/api/v1/malla/simulation
 Authorization: Bearer {{token}}
+# Util para dejar la malla como estaba antes de probar cambios.
 
 ### ==========================================
 ### 8. MALLA - especialidades activas del alumno
 ### ==========================================
-# Sale de student_specialty + specialty, no de todas las especialidades de la carrera.
+# Lista solo las especialidades que el alumno tiene activas.
 GET {{baseUrl}}/api/v1/malla/specialties
 Authorization: Bearer {{token}}
+# Alumno de prueba: 20232637.
 
 ### ==========================================
 ### 9. MALLA - explicar estado de un curso
 ### ==========================================
-# Devuelve la explicacion separada en base, simulation y final.
-@curriculumCourseId = 63
+# Sirve para revisar de donde sale el estado de un curso puntual.
+@curriculumCourseId = 43
 
 GET {{baseUrl}}/api/v1/malla/courses/{{curriculumCourseId}}/status
 Authorization: Bearer {{token}}
+# Prueba rapida: Lenguaje y Comunicacion I (1), Programacion Movil (63),
+# Planeamiento Estrategico (46), Sistemas ERP (43).
