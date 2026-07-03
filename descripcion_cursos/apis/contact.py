@@ -4,7 +4,12 @@ from flask import Blueprint, jsonify
 from sqlalchemy.orm import joinedload
 
 from login.middlewares import jwt_required
-from descripcion_cursos.apis.helpers import api_response, role_name, teacher_to_dict, user_to_dict
+from descripcion_cursos.apis.helpers import (
+    api_response,
+    role_name,
+    teacher_to_dict,
+    user_to_dict,
+)
 from descripcion_cursos.models import Enrollment, Section, SectionRepresentative, Student
 from core.database import Session
 
@@ -18,6 +23,7 @@ def fetch_contacts(section_id):
     status = 200
     session = Session()
     try:
+        # Trae la seccion con su docente
         section = (
             session.query(Section)
             .options(joinedload(Section.teacher))
@@ -33,19 +39,22 @@ def fetch_contacts(section_id):
             status = 404
             return response, status
 
+        # Busca delegado y subdelegado activos
         representatives = (
             session.query(SectionRepresentative)
             .filter(
                 SectionRepresentative.section_id == section_id,
-                SectionRepresentative.is_active == True,
+                SectionRepresentative.is_active.is_(True),
             )
             .all()
         )
+        
         roles_by_enrollment = {
             representative.enrollment_id: role_name(representative.position)
             for representative in representatives
         }
 
+        # Trae los alumnos matriculados junto con sus datos
         enrollments = (
             session.query(Enrollment)
             .options(joinedload(Enrollment.student).joinedload(Student.user))
@@ -77,6 +86,7 @@ def fetch_contacts(section_id):
                 'alumnos': students,
             },
         ))
+        
     except Exception as e:
         traceback.print_exc()
         response = jsonify(api_response(

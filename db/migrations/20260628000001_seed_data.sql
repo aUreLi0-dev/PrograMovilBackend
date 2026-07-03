@@ -127,7 +127,10 @@ VALUES
 INSERT INTO teacher (id, teacher_code, full_name, institutional_email)
 VALUES
   (1, 'D01', 'Hernan Alejandro Quintana Cruz',   'hquintana@ul.edu.pe'),
-  (2, 'D02', 'Jose Jesús Valdivia Caballero',     'jvaldivia@ul.edu.pe');
+  (2, 'D02', 'Jose Jesús Valdivia Caballero',     'jvaldivia@ul.edu.pe'),
+  (3, 'D03', 'John Oliver Taco Lopez',            'jtaco@ul.edu.pe'),
+  (4, 'D04', 'Caridad Aguilar Lozano',            'caguilar@ul.edu.pe'),
+  (5, 'D05', 'Dario Neiver Velazquez Colchado',   'dvelazquez@ul.edu.pe');
 
 -- 2. CURRICULUM Y ESPECIALIDADES
 INSERT INTO curriculum (id, career_id, name)
@@ -185,8 +188,8 @@ VALUES
 
 INSERT INTO section (id, course_offering_id, teacher_id, code)
 VALUES
-  (1, 1,  1, 'IS-856'),  (2, 2,  2, 'ML-753'),  (3, 3,  1, 'GDO-754'),
-  (4, 3,  2, 'GDO-755'), (5, 4,  2, 'PM-854'),  (6, 5,  2, 'SIE-755'),
+  (1, 1,  1, 'IS-856'),  (2, 2,  3, 'ML-753'),     (3, 3,  4, 'GDO-754'),
+  (4, 3,  2, 'GDO-755'), (5, 4,  2, 'PM-854'),  (6, 5,  5, 'SIE-754'),
   (7, 6,  1, 'PW-855'),  (8, 7,  2, 'GP-802'),  (9, 7,  1, 'GP-804');
 
 -- 4. ESTUDIANTES

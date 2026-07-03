@@ -34,18 +34,6 @@ def decimal_to_int(value):
     return int(value)
 
 
-def decimal_to_float(value):
-    if value is None:
-        return None
-    return float(value)
-
-
-def format_date(value):
-    if not value:
-        return ''
-    return value.strftime('%d/%m/%Y')
-
-
 def format_time(value):
     if not value:
         return ''

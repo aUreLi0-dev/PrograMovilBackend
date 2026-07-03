@@ -1,22 +1,18 @@
 import traceback
 
-from flask import Blueprint, g, jsonify, request
+from flask import Blueprint, g, jsonify
 from sqlalchemy.orm import joinedload
 
 from login.middlewares import jwt_required
 from descripcion_cursos.apis.helpers import (
     api_response,
-    decimal_to_float,
     decimal_to_int,
 )
 from descripcion_cursos.models import (
-    AppUser,
     CourseOffering,
     Enrollment,
     Section,
     Student,
-    StudentScore,
-    Syllabus,
 )
 from core.database import Session
 
@@ -24,71 +20,14 @@ api = Blueprint('descripcion_cursos_section', __name__)
 
 
 def _find_enrollment_for_section(session, section_id):
-    student_code = request.args.get('student_code') or getattr(g, 'username', None)
-    enrollment = None
-
-    if student_code:
-        enrollment = (
-            session.query(Enrollment)
-            .join(Student)
-            .join(AppUser)
-            .filter(
-                Enrollment.section_id == section_id,
-                AppUser.code == str(student_code),
-            )
-            .first()
-        )
-
-    if enrollment:
-        return enrollment
-
-    student_id = request.args.get('student_id')
-    if student_id:
-        enrollment = (
-            session.query(Enrollment)
-            .filter(
-                Enrollment.section_id == section_id,
-                Enrollment.student_id == student_id,
-            )
-            .first()
-        )
-
-    if enrollment:
-        return enrollment
-
+    # Busca la matricula del alumno autenticado en esta seccion.
     return (
         session.query(Enrollment)
+        .join(Student)
         .filter(Enrollment.section_id == section_id)
-        .order_by(Enrollment.id.asc())
+        .filter(Student.user_id == g.user_id)
         .first()
     )
-
-
-def _calculate_section_average(session, section):
-    syllabus = (
-        session.query(Syllabus)
-        .filter(Syllabus.course_offering_id == section.course_offering_id)
-        .first()
-    )
-    if not syllabus:
-        return 0.0
-
-    scores = (
-        session.query(StudentScore)
-        .join(Enrollment)
-        .filter(
-            Enrollment.section_id == section.id,
-            StudentScore.value.isnot(None),
-        )
-        .all()
-    )
-    if not scores:
-        return 0.0
-
-    values = [decimal_to_float(score.value) for score in scores if score.value is not None]
-    if not values:
-        return 0.0
-    return round(sum(values) / len(values), 2)
 
 
 @api.route('/api/v1/descripcion-cursos/sections/<int:section_id>', methods=['GET'])
@@ -98,6 +37,7 @@ def fetch_section_detail(section_id):
     status = 200
     session = Session()
     try:
+        # Trae la seccion con su docente y curso para armar el encabezado.
         section = (
             session.query(Section)
             .options(
@@ -124,7 +64,6 @@ def fetch_section_detail(section_id):
             'idSeccion': str(section.id),
             'codigoSeccion': section.code,
             'docenteCode': section.teacher.teacher_code if section.teacher else None,
-            'promedioSeccion': _calculate_section_average(session, section),
             'idCurso': str(course.id) if course else None,
             'curso': course.name if course else 'Sin curso',
             'asistido': decimal_to_int(enrollment.attended_hours) if enrollment else 0,

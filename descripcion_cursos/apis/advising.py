@@ -24,6 +24,7 @@ def fetch_advising_sessions(section_id):
     status = 200
     session = Session()
     try:
+        # Valida que la seccion exista
         section = session.query(Section).filter(Section.id == section_id).first()
         if not section:
             response = jsonify(api_response(
@@ -34,6 +35,7 @@ def fetch_advising_sessions(section_id):
             status = 404
             return response, status
 
+        # Busca las asesorias del curso y las especificas de esta seccion
         sessions = (
             session.query(CourseAdvisingSession)
             .options(joinedload(CourseAdvisingSession.teacher))
@@ -56,7 +58,6 @@ def fetch_advising_sessions(section_id):
             data.append({
                 'id': str(item.id),
                 'courseId': str(section.course_offering.course_id),
-                'idSeccion': str(item.section_id) if item.section_id else None,
                 'docenteCode': item.teacher.teacher_code if item.teacher else '',
                 'docente': teacher_to_dict(item.teacher),
                 'dia': day_name(item.day_of_week),
