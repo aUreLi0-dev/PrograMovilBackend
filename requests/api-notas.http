@@ -1,5 +1,5 @@
 @baseUrl = http://localhost:5000
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc4MjY4NjQ1NiwianRpIjoiYzE5YjEwZTYtOTJmNS00MzE0LThlZTktZTk4NzQ1ZjhlNmIwIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjIwMjMyNTQ4IiwibmJmIjoxNzgyNjg2NDU2LCJjc3JmIjoiYjQxY2MxZTMtZWFhMC00Y2NjLWFmZmMtZmUwNTU3ZTE3YzQ4IiwiZXhwIjoxNzgyNzA0NDU2fQ.NDYI6BXYkrT03cLx_FUOmeTosJkeHjyc3LUV0VuzaSw
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc4MzA0OTU3MiwianRpIjoiNWFiMTBkZWEtMzdlMy00YmEzLThkY2YtYThiYWQwZGYzODcwIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjIwMjMyNTQ4IiwibmJmIjoxNzgzMDQ5NTcyLCJjc3JmIjoiMzA4ZGIxMmMtNTUwZi00NzQ4LTllNTUtMjYxMDFlODYzODQzIiwiZXhwIjoxNzgzMDY3NTcyLCJ1c2VyX2lkIjoyfQ.txa8b3CVxiYWQDF8tJcdx2nXROGjWCAJObtXZZAT9JY
 
 ### ==========================================
 ### 1. CALCULADORA - cursos del estudiante
@@ -10,7 +10,7 @@ GET {{baseUrl}}/api/v1/calculator/student/2/courses
 Authorization: Bearer {{token}}
 
 ### 1.2 Detalle de un curso específico (course_offering + student)
-GET {{baseUrl}}/api/v1/calculator/course-offering/1/student/2
+GET {{baseUrl}}/api/v1/calculator/course-offering/1/student/3
 Authorization: Bearer {{token}}
 
 ### 1.3 Detalle por matrícula (enrollment)
@@ -53,7 +53,7 @@ Content-Type: application/json
 }
 
 ### 2.5 Eliminar un tipo
-DELETE {{baseUrl}}/api/v1/assessment-types/9
+DELETE {{baseUrl}}/api/v1/assessment-types/8
 Authorization: Bearer {{token}}
 
 ### ==========================================
@@ -61,7 +61,7 @@ Authorization: Bearer {{token}}
 ### ==========================================
 
 ### 3.1 Listar evaluaciones (todas o filtradas por syllabus_id)
-GET {{baseUrl}}/api/v1/assessments?syllabus_id=1
+GET {{baseUrl}}/api/v1/assessments?syllabus_id=4
 Authorization: Bearer {{token}}
 
 ### 3.2 Obtener una evaluación por ID
@@ -115,7 +115,7 @@ Content-Type: application/json
 
 {
   "enrollment_id": 3,
-  "assessment_id": 3,
+  "assessment_id": 1,
   "value": 13.5
 }
 
