@@ -2,9 +2,9 @@ import traceback
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from core.database import Session
-from notas.models import Career, Specialty, Student, StudentSpecialty
+from especialidades.models import Career, Specialty, Student, StudentSpecialty
 
-api = Blueprint('notas_career_setup', __name__)
+api = Blueprint('especialidades_career_setup', __name__)
 
 @api.route('/api/v1/careers', methods=['GET'])
 @jwt_required()

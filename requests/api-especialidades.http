@@ -1,0 +1,44 @@
+@baseUrl = http://localhost:5000
+@token = {{login.response.body.data.jwt}}
+
+### ==========================================
+### 1. LOGIN - Alumno para configuración
+### ==========================================
+# @name login
+POST {{baseUrl}}/api/sign-in
+Content-Type: application/json
+
+{
+  "code": "20232548",
+  "password": "ulima123"
+}
+
+### ==========================================
+### 2. ESPECIALIDADES - Listar Carreras
+### ==========================================
+GET {{baseUrl}}/api/v1/careers
+Authorization: Bearer {{token}}
+
+### ==========================================
+### 3. ESPECIALIDADES - Listar Especialidades (Todas)
+### ==========================================
+GET {{baseUrl}}/api/v1/specialties
+Authorization: Bearer {{token}}
+
+### ==========================================
+### 4. ESPECIALIDADES - Listar Especialidades de Carrera 1 (Sistemas)
+### ==========================================
+GET {{baseUrl}}/api/v1/specialties?career_id=1
+Authorization: Bearer {{token}}
+
+### ==========================================
+### 5. ESPECIALIDADES - Guardar Configuración de Carrera (Alumno 9)
+### ==========================================
+POST {{baseUrl}}/api/v1/students/9/setup-career
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "career_id": 1,
+  "specialty_ids": [1, 2]
+}

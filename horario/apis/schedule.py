@@ -3,12 +3,12 @@ from flask import Blueprint, jsonify
 from flask_jwt_extended import jwt_required
 from sqlalchemy.orm import joinedload
 from core.database import Session
-from notas.models import (
+from horario.models import (
     Enrollment, Student, Section, CourseOffering, Course,
     Teacher, ScheduleSession, StudentScore
 )
 
-api = Blueprint('notas_schedule', __name__)
+api = Blueprint('horario_schedule', __name__)
 
 DAYS_MAP = {
     1: 'Lunes',
@@ -59,7 +59,6 @@ def get_student_schedule(student_id):
                 'data': None
             }), 404
 
-        # Query all active enrollments for the student
         enrollments = session.query(Enrollment).options(
             joinedload(Enrollment.section).joinedload(Section.course_offering).joinedload(CourseOffering.course),
             joinedload(Enrollment.section).joinedload(Section.teacher)
@@ -75,11 +74,10 @@ def get_student_schedule(student_id):
             course = course_offering.course if course_offering else None
             teacher = section.teacher
             
-            # Fetch schedule sessions for this section
             schedule_sessions = session.query(ScheduleSession).filter_by(section_id=section.id).all()
             
             horarios_list = []
-            primary_color = "#2196F3" # default blue
+            primary_color = "#2196F3"
             
             for sess in schedule_sessions:
                 if sess.color_hex:
@@ -95,7 +93,7 @@ def get_student_schedule(student_id):
             promedio = get_section_average(session, section.id)
 
             secciones_list.append({
-                'idSeccion': section.code, # e.g. "IS-856"
+                'idSeccion': section.code,
                 'codigoSeccion': section.code.split('-')[-1] if '-' in section.code else section.code,
                 'idCurso': str(course.id) if course else "",
                 'curso': course.name if course else "",

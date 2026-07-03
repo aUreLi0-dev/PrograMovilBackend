@@ -1,0 +1,26 @@
+@baseUrl = http://localhost:5000
+@token = {{login.response.body.data.jwt}}
+
+### ==========================================
+### 1. LOGIN - Alumno para horario
+### ==========================================
+# @name login
+POST {{baseUrl}}/api/sign-in
+Content-Type: application/json
+
+{
+  "code": "20232548",
+  "password": "ulima123"
+}
+
+### ==========================================
+### 2. HORARIO - Obtener Horario de Alumno 2
+### ==========================================
+GET {{baseUrl}}/api/v1/students/2/schedule
+Authorization: Bearer {{token}}
+
+### ==========================================
+### 3. HORARIO - Obtener Horario de Alumno 3
+### ==========================================
+GET {{baseUrl}}/api/v1/students/3/schedule
+Authorization: Bearer {{token}}
