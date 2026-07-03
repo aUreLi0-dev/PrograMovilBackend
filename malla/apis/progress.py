@@ -1,17 +1,20 @@
 import traceback
 
-from flask import Blueprint, g, jsonify
+from flask import Blueprint, g
 
 from core.database import Session
 from login.middlewares import jwt_required
-from malla.apis.curriculum import (
-    api_response,
+
+# Reutiliza la logica central de la malla para no calcular distinto.
+from malla.apis.curriculum_logic import (
     build_progress_payload,
+    endpoint_response,
     get_current_curriculum_course_ids,
     get_curriculum_courses,
     get_progress_by_course_id,
     get_student_for_user,
     infer_approved_ids,
+    student_not_found_response,
 )
 
 api = Blueprint('malla_progress', __name__)
@@ -20,30 +23,27 @@ api = Blueprint('malla_progress', __name__)
 @api.route('/api/v1/malla/progress', methods=['GET'])
 @jwt_required
 def fetch_progress():
-    response = None
-    status = 200
     session = Session()
     try:
+        # Usa la misma busqueda de alumno que el endpoint principal de malla.
         student = get_student_for_user(session, g.user_id)
         if not student:
-            response = jsonify(api_response(
-                'Estudiante no encontrado',
-                success=False,
-                error='No existe un estudiante asociado al usuario autenticado',
-            ))
-            status = 404
-            return response, status
+            return student_not_found_response()
 
+        # Trae los mismos datos base que usa la malla completa.
         curriculum_courses = get_curriculum_courses(session, student)
         progress_by_course_id = get_progress_by_course_id(session, student)
         current_course_ids = get_current_curriculum_course_ids(session, student)
+
+        # Aplica el mismo criterio de aprobados que se pinta en la malla.
         approved_ids = infer_approved_ids(
             curriculum_courses,
             student,
             progress_by_course_id,
         )
 
-        response = jsonify(api_response(
+        # Arma el resumen con el formato compartido del modulo.
+        return endpoint_response(
             'Progreso de malla obtenido correctamente',
             data=build_progress_payload(
                 student,
@@ -51,15 +51,14 @@ def fetch_progress():
                 current_course_ids,
                 approved_ids,
             ),
-        ))
+        )
     except Exception as e:
         traceback.print_exc()
-        response = jsonify(api_response(
+        return endpoint_response(
             'Error al obtener progreso de malla',
             success=False,
             error=str(e),
-        ))
-        status = 500
+            status=500,
+        )
     finally:
         session.close()
-    return response, status

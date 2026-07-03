@@ -43,7 +43,6 @@ class Curriculum(Base, ToString):
     id = Column(Integer, primary_key=True, autoincrement=True)
     career_id = Column(Integer, ForeignKey('career.id'), nullable=False, unique=True)
     name = Column(String(120), nullable=False)
-
     career = relationship('Career')
     courses = relationship('CurriculumCourse', back_populates='curriculum')
 
@@ -89,7 +88,6 @@ class CurriculumCourseSpecialty(Base, ToString):
 
     curriculum_course_id = Column(Integer, ForeignKey('curriculum_course.id'), primary_key=True)
     specialty_id = Column(Integer, ForeignKey('specialty.id'), primary_key=True)
-
     specialty = relationship('Specialty')
 
 
@@ -102,7 +100,6 @@ class Student(Base, ToString):
     curriculum_id = Column(Integer, ForeignKey('curriculum.id'), nullable=False)
     current_level = Column(Integer)
     specialty_setup_completed = Column(Boolean, nullable=False, default=False)
-
     user = relationship('AppUser')
     career = relationship('Career')
     curriculum = relationship('Curriculum')
@@ -134,7 +131,6 @@ class Section(Base, ToString):
     course_offering_id = Column(Integer, ForeignKey('course_offering.id'), nullable=False)
     teacher_id = Column(Integer, nullable=False)
     code = Column(String(30), nullable=False)
-
     course_offering = relationship('CourseOffering')
 
 
@@ -145,7 +141,6 @@ class Enrollment(Base, ToString):
     student_id = Column(Integer, ForeignKey('student.id'), nullable=False)
     section_id = Column(Integer, ForeignKey('section.id'), nullable=False)
     status = Column(String(30), nullable=False, default='active')
-
     section = relationship('Section')
 
 

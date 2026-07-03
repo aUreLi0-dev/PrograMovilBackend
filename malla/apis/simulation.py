@@ -1,27 +1,68 @@
 import traceback
 
-from flask import Blueprint, g, jsonify, request
+from flask import Blueprint, g, request
 
 from core.database import Session
 from login.middlewares import jwt_required
-from malla.apis.curriculum import (
+
+# Reutiliza respuestas, estados y calculos finales de curriculum_logic.
+from malla.apis.curriculum_logic import (
     SIMULATION_INPUT_STATUS,
     SIMULATION_RESET_STATUS,
-    api_response,
+    endpoint_response,
     explain_course_status,
     get_student_for_user,
+    student_not_found_response,
 )
 from malla.models import CurriculumCourse, StudentCurriculumSimulation
 
 api = Blueprint('malla_simulation', __name__)
 
 
+def _read_status_request():
+    body = request.get_json() or {}
+    curriculum_course_id = (
+        body.get('curriculumCourseId') or body.get('curriculum_course_id')
+    )
+    requested_status = body.get('status')
+    if not curriculum_course_id or not requested_status:
+        return None, None, endpoint_response(
+            'Datos invalidos para actualizar simulacion',
+            success=False,
+            error='curriculumCourseId y status son obligatorios',
+            status=400,
+        )
+
+    try:
+        curriculum_course_id = int(curriculum_course_id)
+    except (TypeError, ValueError):
+        return None, None, endpoint_response(
+            'Curso de malla invalido',
+            success=False,
+            error='curriculumCourseId debe ser numerico',
+            status=400,
+        )
+
+    return curriculum_course_id, str(requested_status).strip().lower(), None
+
+
 def _find_curriculum_course(session, student, curriculum_course_id):
+    # Confirma que el curso pertenece a la malla del alumno.
     return (
-        session.query(CurriculumCourse)
-        .filter(
-            CurriculumCourse.id == int(curriculum_course_id),
+        session.query(CurriculumCourse).filter(
+            CurriculumCourse.id == curriculum_course_id,
             CurriculumCourse.curriculum_id == student.curriculum_id,
+        ).first()
+    )
+
+
+def _find_simulation(session, student, curriculum_course):
+    # Revisa si ya existe una simulacion para este curso.
+    return (
+        session.query(StudentCurriculumSimulation)
+        .filter(
+            StudentCurriculumSimulation.student_id == student.id,
+            StudentCurriculumSimulation.curriculum_course_id == curriculum_course.id,
         )
         .first()
     )
@@ -33,6 +74,22 @@ def _visual_status(requested_status):
     return requested_status
 
 
+def _validate_requested_status(normalized_status):
+    # Valida contra los estados permitidos definidos para la simulacion.
+    if (
+        normalized_status in SIMULATION_INPUT_STATUS
+        or normalized_status in SIMULATION_RESET_STATUS
+    ):
+        return None
+
+    return endpoint_response(
+        'Estado de simulacion invalido',
+        success=False,
+        error='Usa approved, in_progress, current o available',
+        status=400,
+    )
+
+
 def _status_transition_error(current_status, requested_status):
     requested_visual_status = _visual_status(requested_status)
     if requested_visual_status == 'current' and current_status != 'unlocked':
@@ -42,133 +99,140 @@ def _status_transition_error(current_status, requested_status):
     return None
 
 
+def _reset_to_available(session, student, curriculum_course, simulation):
+    if simulation:
+        session.delete(simulation)
+    session.commit()
+
+    # Recalcula con la logica central para confirmar si queda disponible.
+    calculated_status = explain_course_status(
+        session,
+        student,
+        curriculum_course.id,
+    )
+    final_status = calculated_status['final']['status']
+    final_source = calculated_status['final']['source']
+    response_data = {
+        'curriculumCourseId': curriculum_course.id,
+        'status': final_status,
+        'source': final_source,
+        'storedStatus': None,
+    }
+
+    if final_status != 'unlocked':
+        return endpoint_response(
+            'El curso no puede quedar disponible',
+            data=response_data,
+            success=False,
+            error='El estado recalculado no es unlocked',
+            status=409,
+        )
+
+    response_data['status'] = 'available'
+    return endpoint_response(
+        'Curso cambiado a disponible correctamente',
+        data=response_data,
+    )
+
+
+def _transition_error_response(
+    curriculum_course,
+    current_status,
+    normalized_status,
+    transition_error,
+):
+    return endpoint_response(
+        'Cambio de estado no permitido',
+        data={
+            'curriculumCourseId': curriculum_course.id,
+            'currentStatus': current_status,
+            'requestedStatus': _visual_status(normalized_status),
+        },
+        success=False,
+        error=transition_error,
+        status=409,
+    )
+
+
+def _save_simulation(session, student, curriculum_course, simulation, normalized_status):
+    # Traduce el estado visual al valor que se guarda en simulacion.
+    stored_status = SIMULATION_INPUT_STATUS[normalized_status]
+    if not simulation:
+        simulation = StudentCurriculumSimulation(
+            student_id=student.id,
+            curriculum_id=student.curriculum_id,
+            curriculum_course_id=curriculum_course.id,
+            status=stored_status,
+        )
+        session.add(simulation)
+    else:
+        simulation.status = stored_status
+
+    session.commit()
+    return simulation
+
+
 @api.route('/api/v1/malla/simulation/course-status', methods=['PUT'])
 @jwt_required
 def update_simulated_course_status():
-    response = None
-    status = 200
     session = Session()
     try:
+        # Usa la misma busqueda de alumno que el resto de endpoints de malla.
         student = get_student_for_user(session, g.user_id)
         if not student:
-            response = jsonify(api_response(
-                'Estudiante no encontrado',
-                success=False,
-                error='No existe un estudiante asociado al usuario autenticado',
-            ))
-            status = 404
-            return response, status
+            return student_not_found_response()
 
-        body = request.get_json() or {}
-        curriculum_course_id = body.get('curriculumCourseId') or body.get('curriculum_course_id')
-        requested_status = body.get('status')
+        curriculum_course_id, normalized_status, error_response = _read_status_request()
+        if error_response:
+            return error_response
 
-        if not curriculum_course_id or not requested_status:
-            response = jsonify(api_response(
-                'Datos invalidos para actualizar simulacion',
-                success=False,
-                error='curriculumCourseId y status son obligatorios',
-            ))
-            status = 400
-            return response, status
+        error_response = _validate_requested_status(normalized_status)
+        if error_response:
+            return error_response
 
-        normalized_status = str(requested_status).strip().lower()
-        if (
-            normalized_status not in SIMULATION_INPUT_STATUS
-            and normalized_status not in SIMULATION_RESET_STATUS
-        ):
-            response = jsonify(api_response(
-                'Estado de simulacion invalido',
-                success=False,
-                error='Usa approved, in_progress, current o available',
-            ))
-            status = 400
-            return response, status
-
-        curriculum_course = _find_curriculum_course(session, student, curriculum_course_id)
+        curriculum_course = _find_curriculum_course(
+            session,
+            student,
+            curriculum_course_id,
+        )
         if not curriculum_course:
-            response = jsonify(api_response(
+            return endpoint_response(
                 'Curso de malla no encontrado',
                 success=False,
                 error='El curso no pertenece a la malla del estudiante',
-            ))
-            status = 404
-            return response, status
-
-        simulation = (
-            session.query(StudentCurriculumSimulation)
-            .filter(
-                StudentCurriculumSimulation.student_id == student.id,
-                StudentCurriculumSimulation.curriculum_course_id == curriculum_course.id,
+                status=404,
             )
-            .first()
-        )
+
+        simulation = _find_simulation(session, student, curriculum_course)
 
         if normalized_status in SIMULATION_RESET_STATUS:
-            if simulation:
-                session.delete(simulation)
-            session.commit()
-            calculated_status = explain_course_status(session, student, curriculum_course.id)
-            final_status = calculated_status['final']['status']
-            final_source = calculated_status['final']['source']
-            if final_status != 'unlocked':
-                response = jsonify(api_response(
-                    'El curso no puede quedar disponible',
-                    success=False,
-                    error='El estado recalculado no es unlocked',
-                    data={
-                        'curriculumCourseId': curriculum_course.id,
-                        'status': final_status,
-                        'source': final_source,
-                        'storedStatus': None,
-                    },
-                ))
-                status = 409
-                return response, status
+            return _reset_to_available(session, student, curriculum_course, simulation)
 
-            response = jsonify(api_response(
-                'Curso cambiado a disponible correctamente',
-                data={
-                    'curriculumCourseId': curriculum_course.id,
-                    'status': 'available',
-                    'source': final_source,
-                    'storedStatus': None,
-                },
-            ))
-            return response, status
-
-        current_status_data = explain_course_status(session, student, curriculum_course.id)
+        # Consulta el estado final actual antes de permitir la transicion.
+        current_status_data = explain_course_status(
+            session,
+            student,
+            curriculum_course.id,
+        )
         current_status = current_status_data['final']['status']
         transition_error = _status_transition_error(current_status, normalized_status)
         if transition_error:
-            response = jsonify(api_response(
-                'Cambio de estado no permitido',
-                success=False,
-                error=transition_error,
-                data={
-                    'curriculumCourseId': curriculum_course.id,
-                    'currentStatus': current_status,
-                    'requestedStatus': _visual_status(normalized_status),
-                },
-            ))
-            status = 409
-            return response, status
-
-        stored_status = SIMULATION_INPUT_STATUS[normalized_status]
-        if not simulation:
-            simulation = StudentCurriculumSimulation(
-                student_id=student.id,
-                curriculum_id=student.curriculum_id,
-                curriculum_course_id=curriculum_course.id,
-                status=stored_status,
+            return _transition_error_response(
+                curriculum_course,
+                current_status,
+                normalized_status,
+                transition_error,
             )
-            session.add(simulation)
-        else:
-            simulation.status = stored_status
 
-        session.commit()
+        simulation = _save_simulation(
+            session,
+            student,
+            curriculum_course,
+            simulation,
+            normalized_status,
+        )
 
-        response = jsonify(api_response(
+        return endpoint_response(
             'Estado simulado actualizado correctamente',
             data={
                 'curriculumCourseId': simulation.curriculum_course_id,
@@ -176,38 +240,31 @@ def update_simulated_course_status():
                 'source': 'simulation',
                 'storedStatus': simulation.status,
             },
-        ))
+        )
     except Exception as e:
         session.rollback()
         traceback.print_exc()
-        response = jsonify(api_response(
+        return endpoint_response(
             'Error al actualizar simulacion de malla',
             success=False,
             error=str(e),
-        ))
-        status = 500
+            status=500,
+        )
     finally:
         session.close()
-    return response, status
 
 
 @api.route('/api/v1/malla/simulation', methods=['DELETE'])
 @jwt_required
 def clear_simulation():
-    response = None
-    status = 200
     session = Session()
     try:
+        # Usa la misma busqueda compartida antes de limpiar la simulacion.
         student = get_student_for_user(session, g.user_id)
         if not student:
-            response = jsonify(api_response(
-                'Estudiante no encontrado',
-                success=False,
-                error='No existe un estudiante asociado al usuario autenticado',
-            ))
-            status = 404
-            return response, status
+            return student_not_found_response()
 
+        # Borra todas las simulaciones del alumno en esta malla.
         deleted = (
             session.query(StudentCurriculumSimulation)
             .filter(
@@ -218,19 +275,18 @@ def clear_simulation():
         )
         session.commit()
 
-        response = jsonify(api_response(
+        return endpoint_response(
             'Simulacion de malla limpiada correctamente',
             data={'deleted': deleted},
-        ))
+        )
     except Exception as e:
         session.rollback()
         traceback.print_exc()
-        response = jsonify(api_response(
+        return endpoint_response(
             'Error al limpiar simulacion de malla',
             success=False,
             error=str(e),
-        ))
-        status = 500
+            status=500,
+        )
     finally:
         session.close()
-    return response, status

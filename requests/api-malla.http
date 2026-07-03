@@ -1,8 +1,8 @@
 @baseUrl = http://localhost:5000
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc4MzAzMzE2OSwianRpIjoiYjk1OGFkNTMtMDRlYy00Yzc4LWIyY2EtYTc4YjU4OGNkMzZkIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjIwMjMyNjM3IiwibmJmIjoxNzgzMDMzMTY5LCJjc3JmIjoiY2UyNmQ2MGQtMTVhZC00NjQ4LTlmZTMtMDU4YTUwNmJlNmIzIiwiZXhwIjoxNzgzMDUxMTY5LCJ1c2VyX2lkIjo0fQ.P8AgfoesOQ5ty6KlKGjy9XYjghgD_Ef5vuT9uQeTXs0
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc4MzA2NjU0OSwianRpIjoiYjU2ZDc0NWMtNmRiZS00ZmU2LTk1YTktNWM4MmIyYmU1M2IwIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjIwMjMyNjM3IiwibmJmIjoxNzgzMDY2NTQ5LCJjc3JmIjoiNWFiNmU4NWItMjQwMC00MWZmLWE2MjItN2RkOTk2MGU1YWY4IiwiZXhwIjoxNzgzMDg0NTQ5LCJ1c2VyX2lkIjo0fQ.8F4tN1RVPgDUPVmVeLggjDDmwlPAhW5ZJSAJW4_PSU0
 
 ### ==========================================
-### 1. LOGIN - alumno de prueba de malla
+### 1. LOGIN
 ### ==========================================
 # @name login
 POST {{baseUrl}}/api/sign-in
@@ -67,7 +67,7 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "curriculumCourseId": 46,
+  "curriculumCourseId": 53,
   "status": "available"
 }
 # Planeamiento Estrategico (46) queda disponible.
@@ -91,8 +91,7 @@ Authorization: Bearer {{token}}
 ### ==========================================
 ### 9. MALLA - explicar estado de un curso
 ### ==========================================
-# Sirve para revisar de donde sale el estado de un curso puntual.
-@curriculumCourseId = 43
+@curriculumCourseId = 46
 
 GET {{baseUrl}}/api/v1/malla/courses/{{curriculumCourseId}}/status
 Authorization: Bearer {{token}}
