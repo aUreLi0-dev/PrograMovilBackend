@@ -1,5 +1,5 @@
 @baseUrl = http://localhost:5000
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc4MzA0OTU3MiwianRpIjoiNWFiMTBkZWEtMzdlMy00YmEzLThkY2YtYThiYWQwZGYzODcwIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjIwMjMyNTQ4IiwibmJmIjoxNzgzMDQ5NTcyLCJjc3JmIjoiMzA4ZGIxMmMtNTUwZi00NzQ4LTllNTUtMjYxMDFlODYzODQzIiwiZXhwIjoxNzgzMDY3NTcyLCJ1c2VyX2lkIjoyfQ.txa8b3CVxiYWQDF8tJcdx2nXROGjWCAJObtXZZAT9JY
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc4NDUxNjMyNiwianRpIjoiNjkxNzYxZTMtOGMzNS00OGIzLThiMjYtOWU1ZmM4ZmJiYzZjIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjIwMjMyNTQ4IiwibmJmIjoxNzg0NTE2MzI2LCJjc3JmIjoiMTA3OTliNjAtNGRlOC00MDRhLTgwM2YtMjY1Nzc2NzU3ZTNiIiwiZXhwIjoxNzg0NTM0MzI2LCJ1c2VyX2lkIjoyfQ.9te69DejoU9Zwa7x8x1HIVYmapVWiXNp4L00by3jJl0
 
 ### ==========================================
 ### 1. CALCULADORA - cursos del estudiante
