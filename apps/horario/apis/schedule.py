@@ -80,10 +80,12 @@ def get_student_schedule(student_id):
             primary_color = "#2196F3"
             
             for sess in schedule_sessions:
+                if not sess.day_of_week or sess.day_of_week not in DAYS_MAP:
+                    continue  # Saltar sesiones sin día asignado
                 if sess.color_hex:
                     primary_color = sess.color_hex
                 horarios_list.append({
-                    'dia': DAYS_MAP.get(sess.day_of_week, 'Lunes'),
+                    'dia': DAYS_MAP[sess.day_of_week],
                     'hora_inicio': format_time(sess.start_time),
                     'hora_fin': format_time(sess.end_time),
                     'salon': sess.classroom or '',
