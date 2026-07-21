@@ -22,7 +22,8 @@ VALUES
   (7,  '20225158', 'Hans Anthony Quispe Mamani',            '20225158@aloe.ulima.edu.pe', 'ulima123', NULL, 1),
   (8,  '20231483', 'Ronald Alfredo Hurtado Lago',           '20231483@aloe.ulima.edu.pe', 'ulima123', NULL, 1),
   (9,  '20230000', 'Prueba - SetUpEspecialidad',            '20230000@aloe.ulima.edu.pe', 'ulima123', NULL, 1),
-  (10, '20240000', 'Prueba2 - SetUpEspecialidad',           '20240000@aloe.ulima.edu.pe', 'ulima123', NULL, 1);
+  (10, '20240000', 'Prueba2 - SetUpEspecialidad',           '20240000@aloe.ulima.edu.pe', 'ulima123', NULL, 1),
+  (11, '20230622', 'Mariel Fernanda Casolda Alegria',       '20230622@aloe.ulima.edu.pe', 'ulima123', NULL, 1);
 
 INSERT INTO career (id, code, name, faculty)
 VALUES
@@ -130,7 +131,9 @@ VALUES
   (2, 'D02', 'Jose Jesús Valdivia Caballero',     'jvaldivia@ul.edu.pe'),
   (3, 'D03', 'John Oliver Taco Lopez',            'jtaco@ul.edu.pe'),
   (4, 'D04', 'Caridad Aguilar Lozano',            'caguilar@ul.edu.pe'),
-  (5, 'D05', 'Dario Neiver Velazquez Colchado',   'dvelazquez@ul.edu.pe');
+  (5, 'D05', 'Dario Neiver Velazquez Colchado',   'dvelazquez@ul.edu.pe'),
+  (6, 'D06', 'Edwin Jonathan Escobedo Cardenas',  'eescobedo@ul.edu.pe'),
+  (7, 'D07', 'Henry Joe Wong Urquiza',            'hwong@ul.edu.pe');
 
 -- 2. CURRICULUM Y ESPECIALIDADES
 INSERT INTO curriculum (id, career_id, name)
@@ -155,7 +158,7 @@ VALUES
   (11, 1, 51),  (12, 1, 43),  (13, 1, 54),  (14, 1, 49),  (15, 1, 55),
   (16, 1, 76),  (17, 1, 72),  (18, 1, 59),  (19, 1, 73),  (20, 1, 75),
   (21, 1, 46),  (22, 1, 66),  (23, 1, 74),  (24, 1, 57),  (25, 1, 42),
-  (26, 1, 65);
+  (26, 1, 65),  (27, 1, 39);
 
 INSERT INTO syllabus (id, course_offering_id, title, drive_file_id, drive_file_url)
 VALUES
@@ -188,9 +191,23 @@ VALUES
 
 INSERT INTO section (id, course_offering_id, teacher_id, code)
 VALUES
-  (1, 1,  1, 'IS-856'),  (2, 2,  3, 'ML-753'),     (3, 3,  4, 'GDO-754'),
+  (1, 1,  1, 'IS2-856'), (2, 2,  3, 'ML-753'),     (3, 3,  4, 'GDO-754'),
   (4, 3,  2, 'GDO-755'), (5, 4,  2, 'PM-854'),  (6, 5,  5, 'SIE-754'),
-  (7, 6,  1, 'PW-855'),  (8, 7,  2, 'GP-802'),  (9, 7,  1, 'GP-804');
+  (7, 6,  1, 'PW-855'),  (8, 7,  2, 'GP-802'),  (9, 7,  1, 'GP-804'),
+  (10, 27, 7, 'IS1-752'), (11, 2, 6, 'ML-754');
+
+INSERT INTO schedule_session (id, section_id, day_of_week, start_time, end_time, classroom, color_hex)
+VALUES
+  (3,  2, 2, '20:00', '22:00', 'O2-803',          '#9C27B0'),
+  (4,  2, 4, '19:00', '22:00', 'Sala Virtual 06', '#9C27B0'),
+  (5,  3, 2, '11:00', '13:00', 'L3-404',          '#FF9800'),
+  (6,  3, 5, '11:00', '13:00', 'L3-402',          '#FF9800'),
+  (14, 6, 3, '07:00', '10:00', 'I2-204',          '#F44336'),
+  (15, 6, 6, '07:00', '09:00', 'L3-402',          '#F44336'),
+  (16, 10, 4, '20:00', '22:00', 'Sala Virtual 15','#3B82F6'),
+  (17, 10, 6, '10:00', '13:00', 'I2-S101',        '#3B82F6'),
+  (18, 11, 1, '14:00', '17:00', 'L3-301',         '#22C55E'),
+  (19, 11, 3, '15:00', '17:00', 'I2-104',         '#22C55E');
 
 -- 4. ESTUDIANTES
 INSERT INTO student (id, user_id, career_id, curriculum_id, current_level, specialty_setup_completed)
@@ -198,7 +215,7 @@ VALUES
   (1, 1,  1, 1, 7, TRUE),  (2, 2,  1, 1, 6, TRUE),  (3, 3,  1, 1, 5, TRUE),
   (4, 4,  1, 1, 7, TRUE),  (5, 5,  1, 1, 7, TRUE),  (6, 6,  1, 1, 3, TRUE),
   (7, 7,  1, 1, 3, TRUE),  (8, 8,  1, 1, 9, TRUE),  (9, 9,  1, 1, 9, FALSE),
-  (10, 10, 1, 1, 9, FALSE);
+  (10, 10, 1, 1, 9, FALSE), (11, 11, 1, 1, 6, FALSE);
 
 -- 5. CURSOS DEL PLAN DE ESTUDIOS
 INSERT INTO curriculum_course (id, curriculum_id, course_id, cycle, display_order, credit, category)
@@ -255,14 +272,22 @@ INSERT INTO enrollment (id, student_id, section_id, status, attended_hours, abse
 VALUES
   (1, 1, 1, 'active', 48, 4,  64),  (2, 1, 5, 'active', 50, 2,  64),
   (3, 2, 1, 'active', 52, 0,  64),  (4, 2, 5, 'active', 47, 5,  64),
-  (5, 2, 2, 'active', 44, 8,  64),  (6, 3, 1, 'active', 46, 6,  64),
-  (7, 3, 5, 'active', 49, 3,  64),  (8, 3, 2, 'active', 45, 7,  64),
+  (5, 2, 2, 'active', 44, 8,  64),  (6, 3, 1, 'withdrawn', 46, 6,  64),
+  (7, 3, 5, 'active', 49, 3,  64),  (8, 3, 2, 'withdrawn', 45, 7,  64),
   (9, 3, 3, 'active', 42, 10, 64),  (10, 4, 1, 'active', 51, 1, 64),
   (11, 4, 5, 'active', 48, 4, 64),  (12, 5, 1, 'active', 50, 2, 64),
   (13, 5, 5, 'active', 47, 5, 64),  (14, 6, 1, 'active', 44, 8, 64),
   (15, 6, 5, 'active', 46, 6, 64),  (16, 6, 3, 'active', 43, 9, 64),
   (17, 6, 2, 'active', 41, 11, 64), (18, 6, 6, 'active', 45, 7, 64),
-  (19, 7, 5, 'active', 48, 4, 64),  (20, 8, 1, 'active', 49, 3, 64);
+  (19, 7, 5, 'active', 48, 4, 64),  (20, 8, 1, 'active', 49, 3, 64),
+  (21, 4, 2, 'active', 0,  0, 64),  (22, 4, 3, 'active', 0,  0, 64),
+  (23, 4, 6, 'active', 0,  0, 64),  (24, 2, 3, 'active', 0,  0, 64),
+  (25, 2, 6, 'active', 0,  0, 64),  (26, 3, 10, 'active', 0, 0, 64),
+  (27, 3, 11, 'active', 0, 0, 64),  (28, 11, 1,  'withdrawn', 0, 0, 64),
+  (29, 11, 5,  'active', 0, 0, 64), (30, 11, 2,  'withdrawn', 0, 0, 64),
+  (31, 11, 3,  'active', 0, 0, 64), (32, 11, 10, 'active', 0, 0, 64),
+  (33, 11, 11, 'active', 0, 0, 64), (34, 3, 6,   'active', 0, 0, 64),
+  (35, 11, 6,  'active', 0, 0, 64);
 
 -- 8. EVALUACIONES POR SÍLABO
 INSERT INTO assessment (id, syllabus_id, assessment_type_id, code, name, week_number, weight) VALUES
@@ -425,10 +450,10 @@ INSERT INTO assessment (id, syllabus_id, assessment_type_id, code, name, week_nu
 
 -- 9. NOTAS DE ESTUDIANTES
 INSERT INTO student_score (id, enrollment_id, assessment_id, value) VALUES
-  (1, 1, 1, 16.5),  -- 20235218 IS-856 EE1
-  (2, 1, 2, 18.0),  -- 20235218 IS-856 Proy1
-  (3, 3, 1, 14.0),  -- 20232548 IS-856 EE1
-  (4, 3, 2, 15.5);  -- 20232548 IS-856 Proy1
+  (1, 1, 1, 16.5),  -- 20235218 IS2-856 EE1
+  (2, 1, 2, 18.0),  -- 20235218 IS2-856 Proy1
+  (3, 3, 1, 14.0),  -- 20232548 IS2-856 EE1
+  (4, 3, 2, 15.5);  -- 20232548 IS2-856 Proy1
 
 -- 10. PROGRESO DE MALLA
 -- Alumno 20232637: ciclo 7 actual, obligatorios de ciclo 6 aprobados y cursos actuales en progreso.
@@ -491,7 +516,7 @@ VALUES
 INSERT INTO section_representative (id, section_id, enrollment_id, position, is_active)
 VALUES
   (1, 1, 1,  'delegate',    TRUE),
-  (2, 1, 14, 'subdelegate', TRUE),
+  (2, 1, 14, 'subdelegate', FALSE),
   (3, 5, 7,  'delegate',    TRUE),
   (4, 5, 4,  'subdelegate', TRUE);
 
@@ -515,11 +540,10 @@ VALUES
    'https://ulima-edu-pe.zoom.us/j/6448302849?pwd=ck5jL1A4LzcwZGRMU2ljdVZhYzJnUT09', 'hybrid', NULL);
 
 -- Restore legacy descripcion_cursos data without changing the current inserts.
--- Extra legacy representatives are inactive when they would duplicate an active
--- role in the same section; announcements can still preserve their old author.
+-- Announcement authors are the source of truth for representatives shown in contacts.
 INSERT OR IGNORE INTO section_representative (id, section_id, enrollment_id, position, is_active)
 VALUES
-  (5, 1, 12, 'subdelegate', FALSE);
+  (5, 1, 12, 'subdelegate', TRUE);
 
 INSERT OR IGNORE INTO announcement (id, section_representative_id, title, message, published_at, is_active)
 VALUES
@@ -537,6 +561,7 @@ DELETE FROM curriculum_course_specialty;
 DELETE FROM student_score;
 DELETE FROM assessment;
 DELETE FROM enrollment;
+DELETE FROM schedule_session;
 DELETE FROM student_specialty;
 DELETE FROM curriculum_course;
 DELETE FROM student;

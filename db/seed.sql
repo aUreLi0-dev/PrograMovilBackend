@@ -32,7 +32,8 @@ VALUES
   (7,  '20225158', 'Hans Anthony Quispe Mamani',            '20225158@aloe.ulima.edu.pe', 'ulima123', NULL, 1),
   (8,  '20231483', 'Ronald Alfredo Hurtado Lago',           '20231483@aloe.ulima.edu.pe', 'ulima123', NULL, 1),
   (9,  '20230000', 'Prueba - SetUpEspecialidad',            '20230000@aloe.ulima.edu.pe', 'ulima123', NULL, 1),
-  (10, '20240000', 'Prueba2 - SetUpEspecialidad',           '20240000@aloe.ulima.edu.pe', 'ulima123', NULL, 1);
+  (10, '20240000', 'Prueba2 - SetUpEspecialidad',           '20240000@aloe.ulima.edu.pe', 'ulima123', NULL, 1),
+  (11, '20230622', 'Mariel Fernanda Casolda Alegria',       '20230622@aloe.ulima.edu.pe', 'ulima123', NULL, 1);
 
 INSERT INTO career (id, code, name, faculty)
 VALUES
@@ -137,7 +138,12 @@ VALUES
 INSERT INTO teacher (id, teacher_code, full_name, institutional_email)
 VALUES
   (1, 'D01', 'Hernan Alejandro Quintana Cruz',   'hquintana@ul.edu.pe'),
-  (2, 'D02', 'Jose Jesús Valdivia Caballero',     'jvaldivia@ul.edu.pe');
+  (2, 'D02', 'Jose Jesús Valdivia Caballero',     'jvaldivia@ul.edu.pe'),
+  (3, 'D03', 'John Oliver Taco Lopez',            'jtaco@ul.edu.pe'),
+  (4, 'D04', 'Caridad Aguilar Lozano',            'caguilar@ul.edu.pe'),
+  (5, 'D05', 'Dario Neiver Velazquez Colchado',   'dvelazquez@ul.edu.pe'),
+  (6, 'D06', 'Edwin Jonathan Escobedo Cardenas',  'eescobedo@ul.edu.pe'),
+  (7, 'D07', 'Henry Joe Wong Urquiza',            'hwong@ul.edu.pe');
 
 -- ==========================================
 -- 2. CURRICULUM Y ESPECIALIDADES
@@ -186,7 +192,8 @@ VALUES
   (23, 1, 74),  -- ARQUITECTURA DE TECNOLOGÍAS DE LA INFORMACIÓN
   (24, 1, 57),  -- ANÁLISIS Y DISEÑO DE ALGORITMOS
   (25, 1, 42),  -- PROPUESTA DE INVESTIGACIÓN
-  (26, 1, 65);  -- SISTEMAS DISTRIBUIDOS
+  (26, 1, 65),  -- SISTEMAS DISTRIBUIDOS
+  (27, 1, 39);  -- INGENIERÍA DE SOFTWARE I
 
 INSERT INTO syllabus (id, course_offering_id, title, drive_file_id, drive_file_url)
 VALUES
@@ -219,15 +226,33 @@ VALUES
 
 INSERT INTO section (id, course_offering_id, teacher_id, code)
 VALUES
-  (1, 1,  1, 'IS-856'),   -- INGENIERÍA DE SOFTWARE II  / Quintana
-  (2, 2,  2, 'ML-753'),   -- APRENDIZAJE DE MÁQUINA    / Valdivia
-  (3, 3,  1, 'GDO-754'),  -- GESTIÓN DE OPERACIONES    / Quintana
+  (1, 1,  1, 'IS2-856'),  -- INGENIERÍA DE SOFTWARE II  / Quintana
+  (2, 2,  3, 'ML-753'),   -- APRENDIZAJE DE MÁQUINA    / Taco
+  (3, 3,  4, 'GDO-754'),  -- GESTIÓN DE OPERACIONES    / Aguilar
   (4, 3,  2, 'GDO-755'),  -- GESTIÓN DE OPERACIONES    / Valdivia (otra sección)
   (5, 4,  2, 'PM-854'),   -- PROGRAMACIÓN MÓVIL        / Valdivia
-  (6, 5,  2, 'SIE-755'),  -- SISTEMAS INTELIGENCIA EMPRESARIAL / Valdivia
+  (6, 5,  5, 'SIE-754'),  -- SISTEMAS INTELIGENCIA EMPRESARIAL / Velazquez
   (7, 6,  1, 'PW-855'),   -- PROGRAMACIÓN WEB          / Quintana
   (8, 7,  2, 'GP-802'),   -- GESTIÓN DE PROYECTOS      / Valdivia
-  (9, 7,  1, 'GP-804');   -- GESTIÓN DE PROYECTOS      / Quintana (otra sección)
+  (9, 7,  1, 'GP-804'),   -- GESTIÓN DE PROYECTOS      / Quintana (otra sección)
+  (10, 27, 7, 'IS1-752'), -- INGENIERÍA DE SOFTWARE I  / Wong
+  (11, 2,  6, 'ML-754');  -- APRENDIZAJE DE MÁQUINA    / Escobedo
+
+-- ==========================================
+-- 3.1 BLOQUES DE HORARIO
+-- ==========================================
+INSERT INTO schedule_session (id, section_id, day_of_week, start_time, end_time, classroom, color_hex)
+VALUES
+  (3,  2, 2, '20:00', '22:00', 'O2-803',          '#9C27B0'), -- ML-753 martes
+  (4,  2, 4, '19:00', '22:00', 'Sala Virtual 06', '#9C27B0'), -- ML-753 jueves virtual
+  (5,  3, 2, '11:00', '13:00', 'L3-404',          '#FF9800'), -- GDO-754 martes
+  (6,  3, 5, '11:00', '13:00', 'L3-402',          '#FF9800'), -- GDO-754 viernes
+  (14, 6, 3, '07:00', '10:00', 'I2-204',          '#F44336'), -- SIE-754 miercoles
+  (15, 6, 6, '07:00', '09:00', 'L3-402',          '#F44336'), -- SIE-754 sabado
+  (16, 10, 4, '20:00', '22:00', 'Sala Virtual 15','#3B82F6'), -- IS1-752 jueves virtual
+  (17, 10, 6, '10:00', '13:00', 'I2-S101',        '#3B82F6'), -- IS1-752 sabado
+  (18, 11, 1, '14:00', '17:00', 'L3-301',         '#22C55E'), -- ML-754 lunes
+  (19, 11, 3, '15:00', '17:00', 'I2-104',         '#22C55E'); -- ML-754 miercoles
 
 -- ==========================================
 -- 4. ESTUDIANTES
@@ -243,7 +268,8 @@ VALUES
   (7, 7,  1, 1, 3, TRUE),
   (8, 8,  1, 1, 9, TRUE),
   (9, 9,  1, 1, 9, FALSE),
-  (10, 10, 1, 1, 9, FALSE);
+  (10, 10, 1, 1, 9, FALSE),
+  (11, 11, 1, 1, 6, FALSE);
 
 -- ==========================================
 -- 5. CURSOS DEL PLAN DE ESTUDIOS
@@ -346,26 +372,41 @@ VALUES
 -- ==========================================
 INSERT INTO enrollment (id, student_id, section_id, status, attended_hours, absent_hours, total_hours)
 VALUES
-  (1, 1, 1, 'active', 48, 4,  64),  -- 20235218 → IS-856
+  (1, 1, 1, 'active', 48, 4,  64),  -- 20235218 → IS2-856
   (2, 1, 5, 'active', 50, 2,  64),  -- 20235218 → PM-854
-  (3, 2, 1, 'active', 52, 0,  64),  -- 20232548 → IS-856
+  (3, 2, 1, 'active', 52, 0,  64),  -- 20232548 → IS2-856
   (4, 2, 5, 'active', 47, 5,  64),  -- 20232548 → PM-854
   (5, 2, 2, 'active', 44, 8,  64),  -- 20232548 → ML-753
-  (6, 3, 1, 'active', 46, 6,  64),  -- 20232907 → IS-856
+  (6, 3, 1, 'withdrawn', 46, 6,  64), -- 20232907 → IS2-856
   (7, 3, 5, 'active', 49, 3,  64),  -- 20232907 → PM-854
-  (8, 3, 2, 'active', 45, 7,  64),  -- 20232907 → ML-753
+  (8, 3, 2, 'withdrawn', 45, 7,  64), -- 20232907 → ML-753
   (9, 3, 3, 'active', 42, 10, 64),  -- 20232907 → GDO-754
-  (10, 4, 1, 'active', 51, 1, 64),  -- 20232637 → IS-856
+  (10, 4, 1, 'active', 51, 1, 64),  -- 20232637 → IS2-856
   (11, 4, 5, 'active', 48, 4, 64),  -- 20232637 → PM-854
-  (12, 5, 1, 'active', 50, 2, 64),  -- 20232685 → IS-856
+  (12, 5, 1, 'active', 50, 2, 64),  -- 20232685 → IS2-856
   (13, 5, 5, 'active', 47, 5, 64),  -- 20232685 → PM-854
-  (14, 6, 1, 'active', 44, 8, 64),  -- 20231098 → IS-856
+  (14, 6, 1, 'active', 44, 8, 64),  -- 20231098 → IS2-856
   (15, 6, 5, 'active', 46, 6, 64),  -- 20231098 → PM-854
   (16, 6, 3, 'active', 43, 9, 64),  -- 20231098 → GDO-754
   (17, 6, 2, 'active', 41, 11, 64), -- 20231098 → ML-753
-  (18, 6, 6, 'active', 45, 7, 64),  -- 20231098 → SIE-755
+  (18, 6, 6, 'active', 45, 7, 64),  -- 20231098 → SIE-754
   (19, 7, 5, 'active', 48, 4, 64),  -- 20225158 → PM-854
-  (20, 8, 1, 'active', 49, 3, 64); -- 20231483 → IS-856
+  (20, 8, 1, 'active', 49, 3, 64),  -- 20231483 → IS2-856
+  (21, 4, 2, 'active', 0,  0, 64),  -- 20232637 → ML-753
+  (22, 4, 3, 'active', 0,  0, 64),  -- 20232637 → GDO-754
+  (23, 4, 6, 'active', 0,  0, 64),  -- 20232637 → SIE-754
+  (24, 2, 3, 'active', 0,  0, 64),  -- 20232548 → GDO-754
+  (25, 2, 6, 'active', 0,  0, 64),  -- 20232548 → SIE-754
+  (26, 3, 10, 'active', 0, 0, 64),  -- 20232907 → IS1-752
+  (27, 3, 11, 'active', 0, 0, 64),  -- 20232907 → ML-754
+  (28, 11, 1,  'withdrawn', 0, 0, 64), -- 20230622 → IS2-856
+  (29, 11, 5,  'active', 0, 0, 64), -- 20230622 → PM-854
+  (30, 11, 2,  'withdrawn', 0, 0, 64), -- 20230622 → ML-753
+  (31, 11, 3,  'active', 0, 0, 64), -- 20230622 → GDO-754
+  (32, 11, 10, 'active', 0, 0, 64), -- 20230622 → IS1-752
+  (33, 11, 11, 'active', 0, 0, 64), -- 20230622 → ML-754
+  (34, 3, 6,   'active', 0, 0, 64), -- 20232907 → SIE-754
+  (35, 11, 6,  'active', 0, 0, 64); -- 20230622 → SIE-754
 
 -- ==========================================
 -- 8. EVALUACIONES POR SÍLABO (desde evaluaciones.json)
@@ -583,13 +624,13 @@ VALUES
 -- ==========================================
 -- 9. NOTAS DE ESTUDIANTES (desde notas_estudiantes.json)
 -- ==========================================
--- 20235218 → INGENIERÍA DE SOFTWARE II (enrollment_id=1, enrollment.student_id=1 → section.code='IS-856')
+-- 20235218 → INGENIERÍA DE SOFTWARE II (enrollment_id=1, enrollment.student_id=1 → section.code='IS2-856')
 INSERT INTO student_score (id, enrollment_id, assessment_id, value)
 VALUES
   (1, 1, 1, 16.5),   -- EE1
   (2, 1, 2, 18.0);   -- Proy1
 
--- 20232548 → INGENIERÍA DE SOFTWARE II (enrollment_id=3, student_id=2, section.code='IS-856')
+-- 20232548 → INGENIERÍA DE SOFTWARE II (enrollment_id=3, student_id=2, section.code='IS2-856')
 INSERT INTO student_score (id, enrollment_id, assessment_id, value)
 VALUES
   (3, 3, 1, 14.0),   -- EE1
@@ -598,12 +639,12 @@ VALUES
 -- 20232907 → PROGRAMACIÓN WEB (enrollment=?? section.code='PW-855')
 
 -- Find enrollment: student_id=3 enrolled in section with code='PW-855' (section_id=7)
--- But from enrollments above: student_id=3 has enrollments in sections 1(IS-856), 5(PM-854), 2(ML-753), 3(GDO-754)
+-- But from enrollments above: student_id=3 has enrollments in sections 1(IS2-856), 5(PM-854), 2(ML-753), 3(GDO-754)
 -- PW-855 (section_id=7) has NO enrollment for student_id=3 in enrollments.json!
 
 -- Wait, looking at notas_estudiantes.json again:
--- {"idEstudiante": "20232907", "idCurso": "6", "codigoSeccion": "IS-856", "evaluaciones": [{"evaluacionId": "eval_6_01", ...}]}
--- idCurso "6" in the JSON refers to PW-855 (Programación Web), but codigoSeccion is "IS-856" which is contradictory.
+-- {"idEstudiante": "20232907", "idCurso": "6", "codigoSeccion": "IS2-856", "evaluaciones": [{"evaluacionId": "eval_6_01", ...}]}
+-- idCurso "6" in the JSON refers to PW-855 (Programación Web), but codigoSeccion is "IS2-856" which is contradictory.
 -- This is a data inconsistency in the JSON. I'll skip this entry since there's no valid enrollment for it.
 
 INSERT INTO curriculum_course_specialty (curriculum_course_id, specialty_id)
@@ -697,10 +738,10 @@ VALUES
 INSERT OR IGNORE INTO section_representative (id, section_id, enrollment_id, position, is_active)
 VALUES
   (1, 1, 1,  'delegate',    TRUE),
-  (2, 1, 14, 'subdelegate', TRUE),
+  (2, 1, 14, 'subdelegate', FALSE),
   (3, 5, 7,  'delegate',    TRUE),
   (4, 5, 4,  'subdelegate', TRUE),
-  (5, 1, 12, 'subdelegate', FALSE);
+  (5, 1, 12, 'subdelegate', TRUE);
 
 INSERT OR IGNORE INTO announcement (id, section_representative_id, title, message, published_at, is_active)
 VALUES
