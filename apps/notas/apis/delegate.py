@@ -98,13 +98,29 @@ def get_delegate_sections():
 # ==========================================
 # 2. LISTAR ANUNCIOS DE UNA SECCIÓN
 # ==========================================
-@api.route('/api/v1/sections/<int:section_id>/announcements', methods=['GET'])
+@api.route('/api/v1/sections/<section_id>/announcements', methods=['GET'])
 @jwt_required
 def get_section_announcements(section_id):
     response = None
     status = 200
     session = Session()
     try:
+        # Aceptar tanto el id numérico ("1") como el código de sección ("IS-856"),
+        # porque el horario navega usando el código y el delegado usa el id.
+        if section_id.isdigit():
+            real_section_id = int(section_id)
+        else:
+            sec = session.query(Section).filter(Section.code == section_id).first()
+            real_section_id = sec.id if sec else None
+
+        if real_section_id is None:
+            return jsonify({
+                'message': f'No se encontró la sección "{section_id}"',
+                'data': None,
+                'success': False,
+                'error': 'Not Found'
+            }), 404
+
         # Consultar anuncios activos para la sección especificada
         announcements = (
             session.query(Announcement)
@@ -115,7 +131,7 @@ def get_section_announcements(section_id):
                 .joinedload(Student.user)
             )
             .join(SectionRepresentative, Announcement.section_representative_id == SectionRepresentative.id)
-            .filter(SectionRepresentative.section_id == section_id)
+            .filter(SectionRepresentative.section_id == real_section_id)
             .filter(Announcement.is_active == True)
             .order_by(Announcement.published_at.desc())
             .all()
@@ -132,7 +148,7 @@ def get_section_announcements(section_id):
 
             announcements_list.append({
                 'id': str(item.id),
-                'idSeccion': str(section_id),
+                'idSeccion': str(real_section_id),
                 'titulo': item.title,
                 'mensaje': item.message,
                 'fecha': f"{item.published_at.day}/{item.published_at.month}/{item.published_at.year}",
