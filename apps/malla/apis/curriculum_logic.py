@@ -24,9 +24,11 @@ SIMULATION_INPUT_STATUS = {
     'approved': 'simulated_approved',
     'in_progress': 'simulated_in_progress',
     'current': 'simulated_in_progress',
+    'available': 'simulated_unlocked',
+    'unlocked': 'simulated_unlocked',
 }
 
-SIMULATION_RESET_STATUS = {'available'}
+SIMULATION_RESET_STATUS = {'official', 'reset'}
 
 
 # Formato comun para todas las respuestas del modulo.
@@ -234,7 +236,15 @@ def infer_approved_ids(
 
 
 # Confirma si todos los obligatorios hasta cierto ciclo estan aprobados.
-def has_completed_mandatory_cycles(curriculum_courses, approved_ids, through_level):
+def has_completed_mandatory_cycles(
+    curriculum_courses,
+    approved_ids,
+    through_level,
+    current_level=None,
+):
+    if current_level and current_level > through_level:
+        return True
+
     return all(
         item.id in approved_ids
         for item in curriculum_courses
@@ -279,6 +289,12 @@ def calculate_statuses(
         if simulation_status == 'simulated_in_progress':
             statuses[item.id] = 'current'
             continue
+        if simulation_status == 'simulated_unlocked':
+            statuses[item.id] = 'unlocked'
+            continue
+        if simulation_status == 'simulated_locked':
+            statuses[item.id] = 'locked'
+            continue
 
         # Despues vienen progreso real, matricula activa y nivel actual.
         saved_status = progress_by_course_id.get(item.id)
@@ -298,6 +314,7 @@ def calculate_statuses(
             curriculum_courses,
             approved_ids,
             required_cycle,
+            student.current_level,
         ):
             statuses[item.id] = 'locked'
             continue
@@ -481,6 +498,10 @@ def simulation_to_visual_status(simulation_status):
         return 'approved'
     if simulation_status == 'simulated_in_progress':
         return 'current'
+    if simulation_status == 'simulated_unlocked':
+        return 'unlocked'
+    if simulation_status == 'simulated_locked':
+        return 'locked'
     return None
 
 
@@ -561,6 +582,7 @@ def explain_course_status(session, student, curriculum_course_id):
             curriculum_courses,
             final_approved_ids,
             required_level,
+            student.current_level,
         )
 
     # Lista prerequisitos y marca cuales ya estan cumplidos.

@@ -85,21 +85,25 @@ def _validate_requested_status(normalized_status):
     return endpoint_response(
         'Estado de simulacion invalido',
         success=False,
-        error='Usa approved, in_progress, current o available',
+        error='Usa approved, in_progress, current, available, unlocked, official o reset',
         status=400,
     )
 
 
-def _status_transition_error(current_status, requested_status):
-    requested_visual_status = _visual_status(requested_status)
-    if requested_visual_status == 'current' and current_status != 'unlocked':
-        return 'Solo un curso disponible puede pasar a cursando'
-    if requested_visual_status == 'approved' and current_status != 'current':
-        return 'Solo un curso en curso puede pasar a aprobado'
-    return None
+def _locked_course_response(curriculum_course):
+    return endpoint_response(
+        'Cambio de estado no permitido',
+        data={
+            'curriculumCourseId': curriculum_course.id,
+            'currentStatus': 'locked',
+        },
+        success=False,
+        error='El curso esta bloqueado hasta cumplir sus prerrequisitos',
+        status=409,
+    )
 
 
-def _reset_to_available(session, student, curriculum_course, simulation):
+def _reset_to_official(session, student, curriculum_course, simulation):
     if simulation:
         session.delete(simulation)
     session.commit()
@@ -119,38 +123,9 @@ def _reset_to_available(session, student, curriculum_course, simulation):
         'storedStatus': None,
     }
 
-    if final_status != 'unlocked':
-        return endpoint_response(
-            'El curso no puede quedar disponible',
-            data=response_data,
-            success=False,
-            error='El estado recalculado no es unlocked',
-            status=409,
-        )
-
-    response_data['status'] = 'available'
     return endpoint_response(
-        'Curso cambiado a disponible correctamente',
+        'Curso restaurado a su estado oficial correctamente',
         data=response_data,
-    )
-
-
-def _transition_error_response(
-    curriculum_course,
-    current_status,
-    normalized_status,
-    transition_error,
-):
-    return endpoint_response(
-        'Cambio de estado no permitido',
-        data={
-            'curriculumCourseId': curriculum_course.id,
-            'currentStatus': current_status,
-            'requestedStatus': _visual_status(normalized_status),
-        },
-        success=False,
-        error=transition_error,
-        status=409,
     )
 
 
@@ -206,23 +181,15 @@ def update_simulated_course_status():
         simulation = _find_simulation(session, student, curriculum_course)
 
         if normalized_status in SIMULATION_RESET_STATUS:
-            return _reset_to_available(session, student, curriculum_course, simulation)
+            return _reset_to_official(session, student, curriculum_course, simulation)
 
-        # Consulta el estado final actual antes de permitir la transicion.
         current_status_data = explain_course_status(
             session,
             student,
             curriculum_course.id,
         )
-        current_status = current_status_data['final']['status']
-        transition_error = _status_transition_error(current_status, normalized_status)
-        if transition_error:
-            return _transition_error_response(
-                curriculum_course,
-                current_status,
-                normalized_status,
-                transition_error,
-            )
+        if current_status_data['final']['status'] == 'locked':
+            return _locked_course_response(curriculum_course)
 
         simulation = _save_simulation(
             session,

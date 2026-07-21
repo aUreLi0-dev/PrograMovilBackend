@@ -212,10 +212,10 @@ VALUES
 -- 4. ESTUDIANTES
 INSERT INTO student (id, user_id, career_id, curriculum_id, current_level, specialty_setup_completed)
 VALUES
-  (1, 1,  1, 1, 7, TRUE),  (2, 2,  1, 1, 6, TRUE),  (3, 3,  1, 1, 5, TRUE),
-  (4, 4,  1, 1, 7, TRUE),  (5, 5,  1, 1, 7, TRUE),  (6, 6,  1, 1, 3, TRUE),
+  (1, 1,  1, 1, 7, TRUE),  (2, 2,  1, 1, 7, TRUE),  (3, 3,  1, 1, 7, TRUE),
+  (4, 4,  1, 1, 7, TRUE),  (5, 5,  1, 1, 7, TRUE),  (6, 6,  1, 1, 7, TRUE),
   (7, 7,  1, 1, 3, TRUE),  (8, 8,  1, 1, 9, TRUE),  (9, 9,  1, 1, 9, FALSE),
-  (10, 10, 1, 1, 9, FALSE), (11, 11, 1, 1, 6, FALSE);
+  (10, 10, 1, 1, 9, FALSE), (11, 11, 1, 1, 7, FALSE);
 
 -- 5. CURSOS DEL PLAN DE ESTUDIOS
 INSERT INTO curriculum_course (id, curriculum_id, course_id, cycle, display_order, credit, category)
@@ -456,13 +456,36 @@ INSERT INTO student_score (id, enrollment_id, assessment_id, value) VALUES
   (4, 3, 2, 15.5);  -- 20232548 IS2-856 Proy1
 
 -- 10. PROGRESO DE MALLA
--- Alumno 20232637: ciclo 7 actual, obligatorios de ciclo 6 aprobados y cursos actuales en progreso.
+-- Los cursos con matricula activa se reflejan como estado real in_progress.
 INSERT INTO student_course_progress (id, student_id, curriculum_id, curriculum_course_id, status) VALUES
-  (1,  4, 1, 63, 'in_progress'),  -- Programacion Movil
-  (2,  4, 1, 45, 'in_progress'),  -- Ingenieria de Software II
-  (3,  4, 1, 38, 'in_progress'),  -- Gestion de Operaciones
-  (4, 4, 1, 37, 'in_progress'),  -- Sistemas de Inteligencia Empresarial
-  (5, 4, 1, 40, 'in_progress');  -- Aprendizaje de Maquina
+  (1,  2, 1, 37, 'in_progress'),  (2,  2, 1, 38, 'in_progress'),
+  (3,  2, 1, 40, 'in_progress'),  (4,  2, 1, 45, 'in_progress'),
+  (5,  2, 1, 63, 'in_progress'),  (6,  3, 1, 37, 'in_progress'),
+  (7,  3, 1, 38, 'in_progress'),  (8,  3, 1, 39, 'in_progress'),
+  (9,  3, 1, 40, 'in_progress'),  (10, 3, 1, 63, 'in_progress'),
+  (11, 4, 1, 37, 'in_progress'),  (12, 4, 1, 38, 'in_progress'),
+  (13, 4, 1, 40, 'in_progress'),  (14, 4, 1, 45, 'in_progress'),
+  (15, 4, 1, 63, 'in_progress'),  (16, 6, 1, 37, 'in_progress'),
+  (17, 6, 1, 38, 'in_progress'),  (18, 6, 1, 40, 'in_progress'),
+  (19, 6, 1, 45, 'in_progress'),  (20, 6, 1, 63, 'in_progress'),
+  (21, 11, 1, 37, 'in_progress'), (22, 11, 1, 38, 'in_progress'),
+  (23, 11, 1, 39, 'in_progress'), (24, 11, 1, 40, 'in_progress'),
+  (25, 11, 1, 63, 'in_progress'), (26, 4, 1, 41, 'approved'),
+  (27, 4, 1, 39, 'approved'),     (28, 1, 1, 35, 'approved'),
+  (29, 1, 1, 39, 'approved'),     (30, 2, 1, 25, 'approved'),
+  (31, 2, 1, 30, 'approved'),     (32, 2, 1, 31, 'approved'),
+  (33, 2, 1, 35, 'approved'),     (34, 2, 1, 39, 'approved'),
+  (35, 3, 1, 25, 'approved'),     (36, 3, 1, 30, 'approved'),
+  (37, 3, 1, 31, 'approved'),     (38, 3, 1, 35, 'approved'),
+  (39, 4, 1, 25, 'approved'),     (40, 4, 1, 30, 'approved'),
+  (41, 4, 1, 31, 'approved'),     (42, 4, 1, 35, 'approved'),
+  (43, 5, 1, 35, 'approved'),     (44, 5, 1, 39, 'approved'),
+  (45, 6, 1, 25, 'approved'),     (46, 6, 1, 30, 'approved'),
+  (47, 6, 1, 31, 'approved'),     (48, 6, 1, 35, 'approved'),
+  (49, 6, 1, 39, 'approved'),     (50, 7, 1, 35, 'approved'),
+  (51, 8, 1, 39, 'approved'),     (52, 11, 1, 25, 'approved'),
+  (53, 11, 1, 30, 'approved'),    (54, 11, 1, 31, 'approved'),
+  (55, 11, 1, 35, 'approved');
 
 INSERT INTO curriculum_course_specialty (curriculum_course_id, specialty_id) VALUES
   (53, 1), (54, 3), (55, 2), (56, 4),
@@ -543,7 +566,15 @@ VALUES
 -- Announcement authors are the source of truth for representatives shown in contacts.
 INSERT OR IGNORE INTO section_representative (id, section_id, enrollment_id, position, is_active)
 VALUES
-  (5, 1, 12, 'subdelegate', TRUE);
+  (5, 1, 12, 'subdelegate', TRUE),
+  (6, 3, 31, 'delegate',    TRUE),
+  (7, 3, 16, 'subdelegate', TRUE),
+  (8, 2, 21, 'delegate',    TRUE),
+  (9, 2, 5,  'subdelegate', TRUE),
+  (10, 6, 35, 'delegate',   TRUE),
+  (11, 6, 23, 'subdelegate', TRUE),
+  (12, 10, 26, 'delegate',   TRUE),
+  (13, 11, 27, 'delegate',   TRUE);
 
 INSERT OR IGNORE INTO announcement (id, section_representative_id, title, message, published_at, is_active)
 VALUES

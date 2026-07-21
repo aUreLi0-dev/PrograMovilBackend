@@ -260,16 +260,16 @@ VALUES
 INSERT INTO student (id, user_id, career_id, curriculum_id, current_level, specialty_setup_completed)
 VALUES
   (1, 1,  1, 1, 7, TRUE),
-  (2, 2,  1, 1, 6, TRUE),
-  (3, 3,  1, 1, 5, TRUE),
+  (2, 2,  1, 1, 7, TRUE),
+  (3, 3,  1, 1, 7, TRUE),
   (4, 4,  1, 1, 7, TRUE),
   (5, 5,  1, 1, 7, TRUE),
-  (6, 6,  1, 1, 3, TRUE),
+  (6, 6,  1, 1, 7, TRUE),
   (7, 7,  1, 1, 3, TRUE),
   (8, 8,  1, 1, 9, TRUE),
   (9, 9,  1, 1, 9, FALSE),
   (10, 10, 1, 1, 9, FALSE),
-  (11, 11, 1, 1, 6, FALSE);
+  (11, 11, 1, 1, 7, FALSE);
 
 -- ==========================================
 -- 5. CURSOS DEL PLAN DE ESTUDIOS
@@ -731,6 +731,68 @@ VALUES
   (70, 1, 77, 'completed_cycle', NULL, 6);
 
 -- ==========================================
+-- 9.1 PROGRESO OFICIAL DE MALLA
+-- ==========================================
+-- Los cursos con matricula activa se reflejan como estado real in_progress.
+INSERT INTO student_course_progress (id, student_id, curriculum_id, curriculum_course_id, status)
+VALUES
+  (1,  2, 1, 37, 'in_progress'), -- Samantha / SIE-754
+  (2,  2, 1, 38, 'in_progress'), -- Samantha / GDO-754
+  (3,  2, 1, 40, 'in_progress'), -- Samantha / ML-753
+  (4,  2, 1, 45, 'in_progress'), -- Samantha / IS2-856
+  (5,  2, 1, 63, 'in_progress'), -- Samantha / PM-854
+  (6,  3, 1, 37, 'in_progress'), -- Martin / SIE-754
+  (7,  3, 1, 38, 'in_progress'), -- Martin / GDO-754
+  (8,  3, 1, 39, 'in_progress'), -- Martin / IS1-752
+  (9,  3, 1, 40, 'in_progress'), -- Martin / ML-754
+  (10, 3, 1, 63, 'in_progress'), -- Martin / PM-854
+  (11, 4, 1, 37, 'in_progress'), -- Melissa / SIE-754
+  (12, 4, 1, 38, 'in_progress'), -- Melissa / GDO-754
+  (13, 4, 1, 40, 'in_progress'), -- Melissa / ML-753
+  (14, 4, 1, 45, 'in_progress'), -- Melissa / IS2-856
+  (15, 4, 1, 63, 'in_progress'), -- Melissa / PM-854
+  (16, 6, 1, 37, 'in_progress'), -- Nehemias / SIE-754
+  (17, 6, 1, 38, 'in_progress'), -- Nehemias / GDO-754
+  (18, 6, 1, 40, 'in_progress'), -- Nehemias / ML-753
+  (19, 6, 1, 45, 'in_progress'), -- Nehemias / IS2-856
+  (20, 6, 1, 63, 'in_progress'), -- Nehemias / PM-854
+  (21, 11, 1, 37, 'in_progress'), -- Mariel / SIE-754
+  (22, 11, 1, 38, 'in_progress'), -- Mariel / GDO-754
+  (23, 11, 1, 39, 'in_progress'), -- Mariel / IS1-752
+  (24, 11, 1, 40, 'in_progress'), -- Mariel / ML-754
+  (25, 11, 1, 63, 'in_progress'), -- Mariel / PM-854
+  (26, 4, 1, 41, 'approved'),      -- Melissa / Ciberseguridad
+  (27, 4, 1, 39, 'approved'),      -- Melissa / Ingenieria de Software I
+  (28, 1, 1, 35, 'approved'),      -- Jefferson / Programacion Web
+  (29, 1, 1, 39, 'approved'),      -- Jefferson / Ingenieria de Software I
+  (30, 2, 1, 25, 'approved'),      -- Samantha / Estadistica Aplicada
+  (31, 2, 1, 30, 'approved'),      -- Samantha / Modelamiento de Base de Datos
+  (32, 2, 1, 31, 'approved'),      -- Samantha / Ingenieria de Procesos de Negocio
+  (33, 2, 1, 35, 'approved'),      -- Samantha / Programacion Web
+  (34, 2, 1, 39, 'approved'),      -- Samantha / Ingenieria de Software I
+  (35, 3, 1, 25, 'approved'),      -- Martin / Estadistica Aplicada
+  (36, 3, 1, 30, 'approved'),      -- Martin / Modelamiento de Base de Datos
+  (37, 3, 1, 31, 'approved'),      -- Martin / Ingenieria de Procesos de Negocio
+  (38, 3, 1, 35, 'approved'),      -- Martin / Programacion Web
+  (39, 4, 1, 25, 'approved'),      -- Melissa / Estadistica Aplicada
+  (40, 4, 1, 30, 'approved'),      -- Melissa / Modelamiento de Base de Datos
+  (41, 4, 1, 31, 'approved'),      -- Melissa / Ingenieria de Procesos de Negocio
+  (42, 4, 1, 35, 'approved'),      -- Melissa / Programacion Web
+  (43, 5, 1, 35, 'approved'),      -- Julio / Programacion Web
+  (44, 5, 1, 39, 'approved'),      -- Julio / Ingenieria de Software I
+  (45, 6, 1, 25, 'approved'),      -- Nehemias / Estadistica Aplicada
+  (46, 6, 1, 30, 'approved'),      -- Nehemias / Modelamiento de Base de Datos
+  (47, 6, 1, 31, 'approved'),      -- Nehemias / Ingenieria de Procesos de Negocio
+  (48, 6, 1, 35, 'approved'),      -- Nehemias / Programacion Web
+  (49, 6, 1, 39, 'approved'),      -- Nehemias / Ingenieria de Software I
+  (50, 7, 1, 35, 'approved'),      -- Hans / Programacion Web
+  (51, 8, 1, 39, 'approved'),      -- Ronald / Ingenieria de Software I
+  (52, 11, 1, 25, 'approved'),     -- Mariel / Estadistica Aplicada
+  (53, 11, 1, 30, 'approved'),     -- Mariel / Modelamiento de Base de Datos
+  (54, 11, 1, 31, 'approved'),     -- Mariel / Ingenieria de Procesos de Negocio
+  (55, 11, 1, 35, 'approved');     -- Mariel / Programacion Web
+
+-- ==========================================
 -- 10. DESCRIPCION DE CURSOS
 -- ==========================================
 -- Datos actuales + legacy recuperado desde assets antiguos.
@@ -741,7 +803,15 @@ VALUES
   (2, 1, 14, 'subdelegate', FALSE),
   (3, 5, 7,  'delegate',    TRUE),
   (4, 5, 4,  'subdelegate', TRUE),
-  (5, 1, 12, 'subdelegate', TRUE);
+  (5, 1, 12, 'subdelegate', TRUE),
+  (6, 3, 31, 'delegate',    TRUE),  -- GDO-754 / Mariel
+  (7, 3, 16, 'subdelegate', TRUE),  -- GDO-754 / Nehemias
+  (8, 2, 21, 'delegate',    TRUE),  -- ML-753 / Melissa
+  (9, 2, 5,  'subdelegate', TRUE),  -- ML-753 / Samantha
+  (10, 6, 35, 'delegate',   TRUE),  -- SIE-754 / Mariel
+  (11, 6, 23, 'subdelegate', TRUE), -- SIE-754 / Melissa
+  (12, 10, 26, 'delegate',   TRUE), -- IS1-752 / Martin
+  (13, 11, 27, 'delegate',   TRUE); -- ML-754 / Martin
 
 INSERT OR IGNORE INTO announcement (id, section_representative_id, title, message, published_at, is_active)
 VALUES

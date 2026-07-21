@@ -70,25 +70,25 @@ def get_delegate_sections():
                 'idCurso': str(course.id),
                 'nombreCurso': course.name,
                 'idSeccion': str(section.id),
-                'codigoSeccion': section.code.split('-')[-1] if '-' in section.code else section.code,
+                'codigoSeccion': section.code,
                 'rol': rol_cliente,
                 'alumnosMatriculados': alumnos_count
             })
 
-        response = jsonify({
+        response = jsonify(clean_payload({
             'message': 'Secciones de delegado obtenidas exitosamente',
             'data': secciones_list,
             'success': True,
             'error': None
-        })
+        }))
     except Exception as e:
         traceback.print_exc()
-        response = jsonify({
+        response = jsonify(clean_payload({
             'message': 'Error al obtener las secciones del delegado',
             'error': str(e),
             'data': None,
             'success': False
-        })
+        }))
         status = 500
     finally:
         session.close()
