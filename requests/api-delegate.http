@@ -1,5 +1,5 @@
 @baseUrl = http://localhost:5000
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc4MzAyMzk5NywianRpIjoiZjY3NTFjMTAtMDNmMy00YTBmLWIxMDItYTZlYWMzYTgyZWFkIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjIwMjM1MjE4IiwibmJmIjoxNzgzMDIzOTk3LCJjc3JmIjoiMDYxNmI2NjMtNDRkYS00MDBjLWEzMTEtNWQ5ZThmMGMxYWNlIiwiZXhwIjoxNzgzMDQxOTk3LCJ1c2VyX2lkIjoxfQ.4eCMj6E2ukvr0VbBwcH25oeXva9sYGry2dOj2t2aThI
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc4NDYwOTM2NCwianRpIjoiZWE1MzdjNmYtOTNjNi00MjI3LWIwNzUtMTg2NGQ2NmIzMTk5IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjIwMjM1MjE4IiwibmJmIjoxNzg0NjA5MzY0LCJjc3JmIjoiNGNlN2QyOGItZDUyMy00ZTJjLThmMmYtNmRmMjI5YzYxYzdlIiwiZXhwIjoxNzg0NjI3MzY0LCJ1c2VyX2lkIjoxfQ.ku1A--krhXDYZcsNIW2ZABLpbx5j2SbvJDie2n2M_DI
 
 ### ==========================================
 ### 1. SIGN-IN - Iniciar sesión
@@ -27,7 +27,7 @@ Content-Type: application/json
 
 {
   "section_id": 1,
-  "title": "Entrega de Trabajo Final",
+  "title": "Prueba de Anuncio 2",
   "message": "Estimados, recuerden que la entrega del Trabajo Final es este domingo a las 11:59 PM sin prórroga."
 }
 

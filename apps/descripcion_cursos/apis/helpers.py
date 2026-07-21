@@ -1,13 +1,15 @@
 from decimal import Decimal
 
+from core.text import clean_payload
+
 
 DAY_NAMES = {
     1: 'Lunes',
     2: 'Martes',
-    3: 'Miercoles',
+    3: 'Mi\u00e9rcoles',
     4: 'Jueves',
     5: 'Viernes',
-    6: 'Sabado',
+    6: 'S\u00e1bado',
     7: 'Domingo',
 }
 
@@ -18,12 +20,12 @@ ROLE_NAMES = {
 
 
 def api_response(message, data=None, success=True, error=None):
-    return {
+    return clean_payload({
         'message': message,
         'data': data,
         'success': success,
         'error': error,
-    }
+    })
 
 
 def decimal_to_int(value):

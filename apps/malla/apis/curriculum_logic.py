@@ -14,6 +14,7 @@ from apps.models import (
     StudentCurriculumSimulation,
     StudentSpecialty,
 )
+from core.text import clean_payload
 
 # ==========================================
 # 1. CONFIGURACION Y RESPUESTA BASE
@@ -30,12 +31,16 @@ SIMULATION_RESET_STATUS = {'available'}
 
 # Formato comun para todas las respuestas del modulo.
 def api_response(message, data=None, success=True, error=None):
-    return {
+    return clean_payload({
         'message': message,
         'data': data,
         'success': success,
         'error': error,
-    }
+    })
+
+
+def is_elective_course(item):
+    return str(item.category or '').strip().lower() == 'elective'
 
 
 # Devuelve una respuesta Flask usando el formato comun del modulo.
@@ -220,7 +225,7 @@ def infer_approved_ids(
     current_level = student.current_level or 0
     for item in curriculum_courses:
         if (
-            item.category != 'elective'
+            not is_elective_course(item)
             and item.cycle < current_level
             and item.id not in simulated_ids
         ):
@@ -233,7 +238,7 @@ def has_completed_mandatory_cycles(curriculum_courses, approved_ids, through_lev
     return all(
         item.id in approved_ids
         for item in curriculum_courses
-        if item.category != 'elective' and item.cycle <= through_level
+        if not is_elective_course(item) and item.cycle <= through_level
     )
 
 
@@ -318,7 +323,7 @@ def visible_curriculum_courses(
 ):
     visible = []
     for item in curriculum_courses:
-        if item.category != 'elective':
+        if not is_elective_course(item):
             visible.append(item)
             continue
         if item.id in approved_ids or item.id in current_course_ids:
@@ -493,7 +498,7 @@ def status_source_for_course(
         return 'real_progress'
     if is_enrolled:
         return 'enrollment'
-    if course.id in approved_ids and course.category != 'elective':
+    if course.id in approved_ids and not is_elective_course(course):
         return 'current_level'
     return 'calculated'
 
@@ -585,7 +590,7 @@ def explain_course_status(session, student, curriculum_course_id):
             },
             'isEnrolled': is_enrolled,
             'isApprovedByCurrentLevel': (
-                course.id in base_approved_ids and course.category != 'elective'
+                course.id in base_approved_ids and not is_elective_course(course)
             ),
         },
         'simulation': {

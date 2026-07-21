@@ -4,6 +4,7 @@ from flask import Blueprint, jsonify, g, request
 from apps.login.middlewares import jwt_required
 from sqlalchemy.orm import joinedload
 from core.database import Session
+from core.text import clean_payload
 from apps.models import (
     Student, Enrollment, SectionRepresentative, Section, CourseOffering,
     Course, Announcement, StudentScore, Assessment
@@ -140,20 +141,20 @@ def get_section_announcements(section_id):
                 'autorRole': rol_cliente
             })
 
-        response = jsonify({
+        response = jsonify(clean_payload({
             'message': 'Anuncios de sección obtenidos exitosamente',
             'data': announcements_list,
             'success': True,
             'error': None
-        })
+        }))
     except Exception as e:
         traceback.print_exc()
-        response = jsonify({
+        response = jsonify(clean_payload({
             'message': 'Error al obtener los anuncios de la sección',
             'error': str(e),
             'data': None,
             'success': False
-        })
+        }))
         status = 500
     finally:
         session.close()
