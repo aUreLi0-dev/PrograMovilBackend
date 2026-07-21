@@ -407,7 +407,7 @@ INSERT INTO assessment (id, syllabus_id, assessment_type_id, code, name, week_nu
 VALUES
   (17, 5, 3, 'EE',    'Examen escrito',           5,  20.0),
   (18, 5, 6, 'LB',    'Laboratorio 1',            9,  25.0),
-  (19, 5, 6, 'LB',    'Laboratorio 2',            13, 25.0),
+   (19, 5, 6, 'LB2',   'Laboratorio 2',            13, 25.0),
   (20, 5, 2, 'TI',    'Exposición de Trabajos finales', 16, 30.0);
 
 -- PROGRAMACIÓN WEB (syllabus_id=6, course_offering_id=6)

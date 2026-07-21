@@ -1,5 +1,5 @@
 @baseUrl = http://localhost:5000
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc4NDUxNjMyNiwianRpIjoiNjkxNzYxZTMtOGMzNS00OGIzLThiMjYtOWU1ZmM4ZmJiYzZjIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjIwMjMyNTQ4IiwibmJmIjoxNzg0NTE2MzI2LCJjc3JmIjoiMTA3OTliNjAtNGRlOC00MDRhLTgwM2YtMjY1Nzc2NzU3ZTNiIiwiZXhwIjoxNzg0NTM0MzI2LCJ1c2VyX2lkIjoyfQ.9te69DejoU9Zwa7x8x1HIVYmapVWiXNp4L00by3jJl0
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc4NDU4NDQxOSwianRpIjoiMzVhZTViODAtYjMyYS00ZTE3LWExYmEtMDJjZmI5OWU0M2EyIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjIwMjMyNTQ4IiwibmJmIjoxNzg0NTg0NDE5LCJjc3JmIjoiOTk3ZDY0NjQtMGZhYy00NWVkLWFjNDMtZGNkODU4OGRkMjkyIiwiZXhwIjoxNzg0NjAyNDE5LCJ1c2VyX2lkIjoyfQ.VdQnhZ2_yJVKRY8jY6_JDwfttjmYYy3Yqy90Kujmax4
 ### ==========================================
 ### 1. SIGN-IN - Iniciar sesión
 ### ==========================================

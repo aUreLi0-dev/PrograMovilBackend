@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from datetime import timedelta
 from flask import Flask, jsonify
+from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from flask_session import Session
 
@@ -10,6 +11,8 @@ APP = Flask(
   static_folder='../../static',
   static_url_path='/'
 )
+
+CORS(APP, supports_credentials=True, resources={r"/api/*": {"origins": "*"}})
 
 APP.config['SECRET_KEY'] = 'your_secret_key'
 APP.config['SESSION_TYPE'] = 'filesystem'

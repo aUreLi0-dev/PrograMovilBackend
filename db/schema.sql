@@ -297,6 +297,19 @@ CREATE TABLE student_score (
 );
 CREATE INDEX idx_student_score_enrollment ON student_score(enrollment_id);
 
+CREATE TABLE simulated_grades (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    enrollment_id INTEGER NOT NULL REFERENCES enrollment(id),
+    assessment_id INTEGER NOT NULL REFERENCES assessment(id),
+    value DECIMAL(5, 2),
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT uq_simulated_grade UNIQUE (enrollment_id, assessment_id),
+    CONSTRAINT chk_simulated_grade_value CHECK (value IS NULL OR value BETWEEN 0 AND 20)
+);
+CREATE INDEX idx_simulated_grades_enrollment ON simulated_grades(enrollment_id);
+CREATE INDEX idx_simulated_grades_assessment ON simulated_grades(assessment_id);
+
 CREATE TABLE announcement (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     section_representative_id INTEGER NOT NULL REFERENCES section_representative(id),

@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from sqlalchemy import (
     Boolean,
     Column,
@@ -212,6 +214,18 @@ class StudentScore(Base, ToString):
     value = Column(DECIMAL(5, 2))
     enrollment = relationship('Enrollment', back_populates='scores')
     assessment = relationship('Assessment', back_populates='scores')
+
+
+class SimulatedGrade(Base, ToString):
+    __tablename__ = 'simulated_grades'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    enrollment_id = Column(Integer, ForeignKey('enrollment.id'), nullable=False)
+    assessment_id = Column(Integer, ForeignKey('assessment.id'), nullable=False)
+    value = Column(DECIMAL(5, 2))
+    created_at = Column(DateTime, nullable=False, default=datetime.now)
+    updated_at = Column(DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)
+    enrollment = relationship('Enrollment')
+    assessment = relationship('Assessment')
 
 
 class ScheduleSession(Base, ToString):
