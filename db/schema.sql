@@ -32,7 +32,7 @@ CREATE TABLE course (
     name VARCHAR(150) NOT NULL,
     default_credit INTEGER NOT NULL,
     origin_faculty VARCHAR(120),
-    CONSTRAINT chk_course_default_credit CHECK (default_credit &gt; 0)
+    CONSTRAINT chk_course_default_credit CHECK (default_credit > 0)
 );
 
 CREATE TABLE academic_period (
@@ -41,7 +41,7 @@ CREATE TABLE academic_period (
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
-    CONSTRAINT chk_academic_period_dates CHECK (start_date &lt; end_date)
+    CONSTRAINT chk_academic_period_dates CHECK (start_date < end_date)
 );
 CREATE UNIQUE INDEX uq_academic_period_single_active ON academic_period(is_active) WHERE is_active = TRUE;
 
@@ -86,8 +86,8 @@ CREATE TABLE academic_week (
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
     CONSTRAINT uq_academic_week_period_number UNIQUE (academic_period_id, week_number),
-    CONSTRAINT chk_academic_week_number CHECK (week_number &gt; 0),
-    CONSTRAINT chk_academic_week_dates CHECK (start_date &lt;= end_date)
+    CONSTRAINT chk_academic_week_number CHECK (week_number > 0),
+    CONSTRAINT chk_academic_week_dates CHECK (start_date <= end_date)
 );
 
 -- ==========================================
@@ -117,9 +117,9 @@ CREATE TABLE curriculum_course (
     category TEXT NOT NULL DEFAULT 'faculty' CHECK (category IN ('general_studies', 'common', 'faculty', 'elective')),
     CONSTRAINT uq_curriculum_course UNIQUE (curriculum_id, course_id),
     CONSTRAINT uq_curriculum_course_id_curriculum UNIQUE (id, curriculum_id),
-    CONSTRAINT chk_curriculum_course_cycle CHECK (cycle &gt; 0),
-    CONSTRAINT chk_curriculum_course_display_order CHECK (display_order &gt; 0),
-    CONSTRAINT chk_curriculum_course_credit CHECK (credit &gt; 0)
+    CONSTRAINT chk_curriculum_course_cycle CHECK (cycle > 0),
+    CONSTRAINT chk_curriculum_course_display_order CHECK (display_order > 0),
+    CONSTRAINT chk_curriculum_course_credit CHECK (credit > 0)
 );
 CREATE INDEX idx_curriculum_course_curriculum ON curriculum_course(curriculum_id);
 
@@ -172,8 +172,8 @@ CREATE TABLE course_prerequisite (
         OR
         (prerequisite_type = 'completed_cycle' AND prerequisite_curriculum_course_id IS NULL AND required_cycle IS NOT NULL)
     ),
-    CONSTRAINT chk_course_prerequisite_required_cycle CHECK (required_cycle IS NULL OR required_cycle &gt; 0),
-    CONSTRAINT chk_course_prerequisite_not_self CHECK (prerequisite_curriculum_course_id IS NULL OR curriculum_course_id &lt;&gt; prerequisite_curriculum_course_id)
+    CONSTRAINT chk_course_prerequisite_required_cycle CHECK (required_cycle IS NULL OR required_cycle > 0),
+    CONSTRAINT chk_course_prerequisite_not_self CHECK (prerequisite_curriculum_course_id IS NULL OR curriculum_course_id <> prerequisite_curriculum_course_id)
 );
 CREATE UNIQUE INDEX uq_course_prerequisite_course ON course_prerequisite(curriculum_course_id, prerequisite_curriculum_course_id) WHERE prerequisite_curriculum_course_id IS NOT NULL;
 CREATE UNIQUE INDEX uq_course_prerequisite_completed_cycle ON course_prerequisite(curriculum_course_id, prerequisite_type, required_cycle) WHERE required_cycle IS NOT NULL;
@@ -199,10 +199,10 @@ CREATE TABLE enrollment (
     total_hours DECIMAL(5, 2) NOT NULL DEFAULT 0,
     CONSTRAINT uq_enrollment_student_section UNIQUE (student_id, section_id),
     CONSTRAINT uq_enrollment_id_section UNIQUE (id, section_id),
-    CONSTRAINT chk_enrollment_attended_hours CHECK (attended_hours &gt;= 0),
-    CONSTRAINT chk_enrollment_absent_hours CHECK (absent_hours &gt;= 0),
-    CONSTRAINT chk_enrollment_total_hours CHECK (total_hours &gt;= 0),
-    CONSTRAINT chk_enrollment_attendance_hours CHECK (attended_hours + absent_hours &lt;= total_hours)
+    CONSTRAINT chk_enrollment_attended_hours CHECK (attended_hours >= 0),
+    CONSTRAINT chk_enrollment_absent_hours CHECK (absent_hours >= 0),
+    CONSTRAINT chk_enrollment_total_hours CHECK (total_hours >= 0),
+    CONSTRAINT chk_enrollment_attendance_hours CHECK (attended_hours + absent_hours <= total_hours)
 );
 CREATE INDEX idx_enrollment_student ON enrollment(student_id);
 
@@ -227,7 +227,7 @@ CREATE TABLE schedule_session (
     color_hex VARCHAR(20),
     CONSTRAINT uq_schedule_session UNIQUE (section_id, day_of_week, start_time),
     CONSTRAINT chk_schedule_session_day CHECK (day_of_week BETWEEN 1 AND 7),
-    CONSTRAINT chk_schedule_session_time CHECK (start_time &lt; end_time)
+    CONSTRAINT chk_schedule_session_time CHECK (start_time < end_time)
 );
 CREATE INDEX idx_schedule_session_section ON schedule_session(section_id);
 
@@ -244,7 +244,7 @@ CREATE TABLE course_advising_session (
     modality TEXT NOT NULL DEFAULT 'hybrid' CHECK (modality IN ('classroom', 'virtual', 'hybrid')),
     note TEXT,
     CONSTRAINT chk_course_advising_day CHECK (day_of_week BETWEEN 1 AND 7),
-    CONSTRAINT chk_course_advising_time CHECK (start_time &lt; end_time)
+    CONSTRAINT chk_course_advising_time CHECK (start_time < end_time)
 );
 CREATE UNIQUE INDEX uq_course_advising_session_course ON course_advising_session(course_offering_id, teacher_id, day_of_week, start_time) WHERE section_id IS NULL;
 CREATE UNIQUE INDEX uq_course_advising_session_section ON course_advising_session(section_id, teacher_id, day_of_week, start_time) WHERE section_id IS NOT NULL;
@@ -259,8 +259,8 @@ CREATE TABLE assessment (
     week_number INTEGER NOT NULL,
     weight DECIMAL(5, 2) NOT NULL,
     CONSTRAINT uq_assessment_syllabus_code UNIQUE (syllabus_id, code),
-    CONSTRAINT chk_assessment_week_number CHECK (week_number &gt; 0),
-    CONSTRAINT chk_assessment_weight CHECK (weight &gt; 0 AND weight &lt;= 100)
+    CONSTRAINT chk_assessment_week_number CHECK (week_number > 0),
+    CONSTRAINT chk_assessment_weight CHECK (weight > 0 AND weight <= 100)
 );
 CREATE INDEX idx_assessment_syllabus ON assessment(syllabus_id);
 

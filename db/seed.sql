@@ -688,3 +688,35 @@ VALUES
   (68, 1, 75, 'completed_cycle', NULL, 5),
   (69, 1, 76, 'completed_cycle', NULL, 5),
   (70, 1, 77, 'completed_cycle', NULL, 6);
+
+-- ==========================================
+-- 10. DESCRIPCION DE CURSOS
+-- ==========================================
+-- Datos actuales + legacy recuperado desde assets antiguos.
+-- INSERT OR IGNORE permite re-ejecutar la seed sin duplicar filas.
+INSERT OR IGNORE INTO section_representative (id, section_id, enrollment_id, position, is_active)
+VALUES
+  (1, 1, 1,  'delegate',    TRUE),
+  (2, 1, 14, 'subdelegate', TRUE),
+  (3, 5, 7,  'delegate',    TRUE),
+  (4, 5, 4,  'subdelegate', TRUE),
+  (5, 1, 12, 'subdelegate', FALSE);
+
+INSERT OR IGNORE INTO announcement (id, section_representative_id, title, message, published_at, is_active)
+VALUES
+  (1, 1, 'Cambio de Aula',
+   'La clase del jueves se realizara en el aula I2-104.', '2026-05-18 00:00:00', TRUE),
+  (2, 4, 'Avance Proyecto',
+   'La entrega del avance 2 sera el proximo martes durante el horario de clase habitual.', '2026-05-21 00:00:00', TRUE),
+  (3, 3, 'Material Complementario',
+   'El docente subio ejercicios adicionales de repaso al Aula Virtual.', '2026-05-22 00:00:00', TRUE),
+  (4, 5, 'Entrega de Laboratorio',
+   'Se amplio la fecha limite del laboratorio 3 hasta el domingo a las 11:59 PM.', '2026-05-20 00:00:00', TRUE);
+
+INSERT OR IGNORE INTO course_advising_session
+  (id, course_offering_id, section_id, teacher_id, day_of_week, start_time, end_time, classroom, meeting_url, modality, note)
+VALUES
+  (1, 1, 1, 1, 5, '15:00', '17:00', 'Pab I2 piso 2 ITLAB',
+   'https://ulima-edu-pe.zoom.us/j/95728854972?pwd=dGtQU2JhSUh4WmhMMHl4Ykt1cnZEUT09', 'hybrid', NULL),
+  (2, 4, 5, 2, 5, '10:00', '11:00', 'Pab. I2-102 (8)',
+   'https://ulima-edu-pe.zoom.us/j/6448302849?pwd=ck5jL1A4LzcwZGRMU2ljdVZhYzJnUT09', 'hybrid', NULL);

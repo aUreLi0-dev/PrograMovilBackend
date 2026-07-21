@@ -7,6 +7,7 @@ from core.database import Session
 from apps.login.application import REVOKED_TOKENS
 from apps.models import AppUser as User
 from apps.models import Student, Career, Specialty, StudentSpecialty
+from core.text import clean_payload
 
 api = Blueprint('main_apis', __name__)
 
@@ -120,6 +121,9 @@ def profile():
 
         if student:
             career = db_session.query(Career).filter(Career.id == student.career_id).first()
+            profile_data['student_id'] = student.id
+            profile_data['career_id'] = student.career_id
+            profile_data['curriculum_id'] = student.curriculum_id
             profile_data['career'] = career.to_dict() if career else None
             profile_data['current_level'] = student.current_level
             profile_data['specialty_setup_completed'] = student.specialty_setup_completed
@@ -135,12 +139,12 @@ def profile():
             )
             profile_data['especialidades'] = [s.to_dict() for s in specialties]
 
-        return jsonify({
+        return jsonify(clean_payload({
             'message': 'Perfil obtenido exitosamente',
             'data': profile_data,
             'success': True,
             'error': None
-        }), 200
+        })), 200
 
     except Exception as e:
         traceback.print_exc()

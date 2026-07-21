@@ -14,6 +14,8 @@ APP = Flask(
 
 CORS(APP, supports_credentials=True, resources={r"/api/*": {"origins": "*"}})
 
+APP.json.ensure_ascii = False
+
 APP.config['SECRET_KEY'] = 'your_secret_key'
 APP.config['SESSION_TYPE'] = 'filesystem'
 APP.config['SESSION_PERMANENT'] = False

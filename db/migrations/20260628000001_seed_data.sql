@@ -514,6 +514,18 @@ VALUES
   (2, 4, 5, 2, 5, '10:00', '11:00', 'Pab. I2-102 (8)',
    'https://ulima-edu-pe.zoom.us/j/6448302849?pwd=ck5jL1A4LzcwZGRMU2ljdVZhYzJnUT09', 'hybrid', NULL);
 
+-- Restore legacy descripcion_cursos data without changing the current inserts.
+-- Extra legacy representatives are inactive when they would duplicate an active
+-- role in the same section; announcements can still preserve their old author.
+INSERT OR IGNORE INTO section_representative (id, section_id, enrollment_id, position, is_active)
+VALUES
+  (5, 1, 12, 'subdelegate', FALSE);
+
+INSERT OR IGNORE INTO announcement (id, section_representative_id, title, message, published_at, is_active)
+VALUES
+  (4, 5, 'Entrega de Laboratorio',
+   'Se amplio la fecha limite del laboratorio 3 hasta el domingo a las 11:59 PM.', '2026-05-20 00:00:00', TRUE);
+
 -- migrate:down
 
 DELETE FROM course_advising_session;
